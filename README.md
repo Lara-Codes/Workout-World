@@ -1,5 +1,4 @@
 # fall-2023
-## The best class at SUNY New Paltz 
 
 	Hi! My name is Lara Palombi and I am a computer science major. Listed below are the computer science classes I have taken: Computer Science I — Computer Science III, Assembly Language and Computer Architecture, Operating Systems, Object Oriented Programming, Discrete Math for Computing, Web & Database Programming, Digital Logic, and Processing.
 
