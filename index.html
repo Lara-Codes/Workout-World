@@ -7,6 +7,7 @@
   <title>First Bulma Example</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  
 </head>
 
 <body>
@@ -96,7 +97,7 @@
 
   <!-- CONTENT -->
 
-  <div class="box m-3" style="border:none; box-shadow:none">
+  <div class="box m-3" style="border:none; box-shadow:none" id = "app">
     <div class="columns">
       <!-- Left  -->
       <div class="column">
@@ -114,7 +115,7 @@
           </header>
 
           <div class="card-content">
-            <div class="content">
+            <div class="content" v-show="open">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec iaculis mauris. <a>@bulmaio</a>.
               <a>#css</a> <a>#responsive</a>
             </div>11:09 PM - 1 Jan 2016
@@ -352,6 +353,17 @@
       </div>
     </div>
   </div>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script>
+    const {createApp, ref} = Vue;
+    const app = createApp({
+      setup(){
+        const open = ref(true)
+        return { open }
+      }
+    })
+    app.mount('#app')
+  </script>
 
 </body>
 
