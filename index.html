@@ -115,7 +115,7 @@
           </header>
 
           <div class="card-content">
-            <div class="content" v-show="open">
+            <div class="content">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec iaculis mauris. <a>@bulmaio</a>.
               <a>#css</a> <a>#responsive</a>
             </div>11:09 PM - 1 Jan 2016
@@ -352,14 +352,33 @@
         </aside>
       </div>
     </div>
+    <div class="column">
+      <!-- 
+      v-for: for every item in list create a new one. 
+      The :class code is from vue and allows you to choose the type based on the object. 
+      v-show toggles the display of an element. 
+      -->
+      <div class="notification is-light" :class="x.type"  v-for="x in list" v-show="x.open"> 
+          <button class="delete" @click="x.open = false" ></button>
+          {{ x.msg }}
+      </div>
+        
+  </div>
   </div>
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
   <script>
-    const {createApp, ref} = Vue;
-    const app = createApp({
+
+    const {createApp, ref} = Vue 
+    const app = createApp({ // ref is an attribute used to obtain a direct reference to a specific DOM element or a 
+      // child component instance after it's mounted. 
       setup(){
-        const open = ref(true)
-        return { open }
+        const list = ref([
+        { msg: 'Hello World', open: true, type: 'is-success' },
+        { msg: 'Congrats! You did it', open: true, type: 'is-warning' },
+        { msg: 'You are a Vue3 master', open: true, type: 'is-info' },
+        { msg: 'Oop! You did it again', open: true, type: 'is-danger'},
+        ]); 
+        return { list }
       }
     })
     app.mount('#app')
