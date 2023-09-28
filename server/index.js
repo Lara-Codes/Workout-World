@@ -1,10 +1,17 @@
 // Vanilla node server
-const http = require('http');
+const express = require("express");
+const app = express(); 
 
-const server = http.createServer((req, res) => {
-    res.end('Hello World!\n');
-});
+const PORT = 3000; 
 
-server.listen(4242, () => {
-    console.log("server is running...")
+app.get('/', (req, res) => {
+    res.send('Hello world!');
 })
+
+console.log('1: Trying to start server...')
+
+app.listen(PORT, () => {
+    console.log(`2: Server is running at http://localhost:${PORT}`)
+})
+
+console.log('3: End of file, waiting for requests...')
