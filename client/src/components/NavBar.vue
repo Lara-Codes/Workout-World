@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { RouterLink } from 'vue-router';
+import LoginBadge from './LoginBadge.vue';
 
 let dropdown = false; 
 let isActive = ref(dropdown)
@@ -62,11 +63,13 @@ function drop(){
       </div>
 
       <div class="navbar-end">
-        
-        <RouterLink class="navbar-item" to="signup">
+        <div class="navbar-item">
+          <LoginBadge />
+        </div>
+
+        <!-- <RouterLink class="navbar-item" to="signup">
           <strong>Sign up</strong>
         </RouterLink>
-
         <div class="buttons">
           <div class="dropdown is-active">
             <div class="dropdown-trigger">
@@ -104,8 +107,10 @@ function drop(){
               target="_blank" style="color:inherit"><span>Tweet</span></a>
           </button>
           <div class="navbar-item"></div>
-        </div>
-      </div>
+        </div>-->
+        
+      </div> 
+
     </div>
 
   </nav>

@@ -12,7 +12,7 @@ function addTask() {
   newTask.value = '';
 }
 
-// const  shouldDisplay = (task: {id?: number, text: string, completed: boolean}) =>
+// const shouldDisplay = (task: {id?: number, text: string, completed: boolean}) =>
 //   (tabState.value==='Current' && !task.completed) ||
 //   (tabState.value == 'Completed' && task.completed) ||
 //   tabState.value == 'All'; 
