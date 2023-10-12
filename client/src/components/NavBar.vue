@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { RouterLink } from 'vue-router';
 import LoginBadge from './LoginBadge.vue';
+import { getSession, login } from '../model/session'
 
 let dropdown = false; 
 let isActive = ref(dropdown)
@@ -9,12 +10,12 @@ let isActive = ref(dropdown)
 function drop(){
   dropdown = !dropdown; 
 }
-
+const session = getSession()
 </script>
 
 <template>
   <!-- NAVBAR  -->
-  <nav class="navbar is-primary" role="navigation" aria-label="main navigation">
+  <nav class="navbar" role="navigation" aria-label="main navigation">
     <div class="navbar-item"></div>
     <div class="navbar-brand">
       <RouterLink class="navbar-item" to="/">
@@ -49,14 +50,20 @@ function drop(){
         </RouterLink>
 
         <div class="navbar-item has-dropdown is-hoverable">
+          
           <a class="navbar-link">
             Admin
           </a>
 
-          <div class="navbar-dropdown">
-            <a class="navbar-item">
+          <div class="navbar-dropdown" v-if="session.user">
+            <RouterLink class="navbar-item" to="/login">
               Users
-            </a>
+            </RouterLink>
+          </div>
+          <div class="navbar-dropdown" v-else>
+            <RouterLink class="navbar-item" to="/login">
+              Users
+            </RouterLink>
           </div>
 
         </div>
@@ -125,9 +132,16 @@ function drop(){
   margin:15px; 
 }
 
+.router-link{
+  color: #00b1d2;
+}
 .router-link-active {
   font-weight: bold;
-  border-bottom: 2px solid #00b1d2;
+  border-top: 2px solid #00b1d2;
 }
+
+.navbar {
+        border-bottom: 2px solid #00b1d2;/* You can change the color and thickness as needed */
+    }
 
 </style>

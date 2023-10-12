@@ -1,29 +1,39 @@
 <script setup lang="ts">
-    import { getSession, login } from '@/model/session'
-    const session = getSession()
+import { getSession, login } from '../model/session'
+const session = getSession()
 </script>
 
 <template>
-    <!-- v-if vs v-show: if user, show this. else show this. -->
-    <div class = "has text-right" v-if="session.user"> 
+    <div class="has-text-right" v-if="session.user">
         Welcome, {{ session.user.firstName }} {{ session.user.lastName }} <br>
-        <small>{{ session.user.email }}
-        <a class="button is-small is-light is-error">
-            <span class="icon">
-                <i class="fas fa-sign-out-alt"></i>
-            </span>
-        </a>
+        <small>
+            {{ session.user.email }}
+            <a class="button is-small is-light is-warning" @click.prevent="session.user = null">
+                <span class="icon">
+                    <i class="fas fa-sign-out-alt"></i>
+                </span>
+            </a>
         </small>
-
     </div>
-    <div class = "buttons" v-else>
-        <a class = "button is-primary">
-            <strong>Sign up</strong>
+    <div class="buttons" v-else>
+        <a class="button is-primary">
+            Sign up
         </a>
-        <a class = "button is-light" @click.prevent="login">
-            Log In
+        <a class="button is-light" @click.prevent="login">
+                Log in
         </a>
     </div>
 </template>
 
-<style scoped></style>
+
+<style scoped>
+.button {
+    color: black;
+    background-color: #00b1d2;
+}
+
+.button:hover {
+    background-color: #00cbef;
+    color: black;
+}
+</style>

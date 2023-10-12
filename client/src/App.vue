@@ -15,12 +15,12 @@ import NavBar from './components/NavBar.vue'
 
 <style scoped>
   body{
-    background-color: azure;
+    background-color: rgb(169, 255, 255);
   }
 
   .container{
-    background-color: white;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); 
+    background-color: hsl(0, 0%, 100%);
+    box-shadow: 0px 0px 2px #0096b0; 
     padding: 5px; 
     min-height: 100vh; 
   }

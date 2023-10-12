@@ -1,48 +1,46 @@
-
 <script setup lang="ts">
-import { ref } from 'vue';
-const newTask = ref('');
-const tasks = ref([] as {id?: number, text: string, completed: boolean}[]) // question mark makes id optional
+  import { getSession, login } from '../model/session'
+  import { ref } from 'vue';
+  const newTask = ref('');
+  const tasks = ref([] as {id?: number, text: string, completed: boolean}[]) // question mark makes id optional
 
-const tabList = ['Current', 'Completed', 'All']
-const tabState = ref('Current');
+  const tabList = ['Current', 'Completed', 'All']
+  const tabState = ref('Current');
 
-function addTask() {
-  tasks.value.push({text: newTask.value, completed: false});
-  newTask.value = '';
-}
+  function addTask() {
+    tasks.value.push({text: newTask.value, completed: false});
+    newTask.value = '';
+  }
 
-// const shouldDisplay = (task: {id?: number, text: string, completed: boolean}) =>
-//   (tabState.value==='Current' && !task.completed) ||
-//   (tabState.value == 'Completed' && task.completed) ||
-//   tabState.value == 'All'; 
+  function shouldDisplay(task: {id?: number, text: string, completed: boolean}){
+    return (tabState.value==='Current' && !task.completed) ||
+    (tabState.value == 'Completed' && task.completed) ||
+    tabState.value == 'All'; 
+  }
 
-function shouldDisplay(task: {id?: number, text: string, completed: boolean}){
-  return (tabState.value==='Current' && !task.completed) ||
-  (tabState.value == 'Completed' && task.completed) ||
-  tabState.value == 'All'; 
-  // if (tabState.value == 'Current'){
-  //   return !task.completed; 
-  // } else if (tabState.value=='Completed'){
-  //   return task.completed; 
-  // } else{
-  //   return true; 
-  // }
-}
+  // Saying welcome user if user 
+  const session = getSession()
 </script>
 
 <template>
   <main class="columns is-multiline is-centered">
-    <div class="column is-full">
-      <h1 class="title">Home</h1>
+    
+    <div class="column is-full ml-3 mr-3 pt-6 pb-6 pl-4 pr-4">
+      <h1 class="title is-3 hometitle">Home</h1>
       <h2 class="subtitle">
-        Welcome to ur app
+        <div v-if="session.user" class="level-item has-text-centered mt-6">
+          Welcome to your exercise account, {{ session.user.firstName }} {{ session.user.lastName }}!
+          What's on the agenda for today? 
+        </div>
+        <div v-else>
+          Please log in to save your progress. 
+        </div>
       </h2>
     </div>
 
     <div class="column is-half-desktop is-centered">
-    <div class="panel is-primary">
-      <p class="panel-heading">
+    <div class="panel">
+      <p class="panel-heading has-text-dark todocolor">
         To Do
       </p>
       <div class="panel-block">
@@ -61,6 +59,7 @@ function shouldDisplay(task: {id?: number, text: string, completed: boolean}){
 
       <label class="panel-block" v-for="task in tasks" v-show="shouldDisplay(task)">
         <!-- v-model is 2 way binding -->
+        <!-- If task.completed = true, checked. else, unchecked. -->
         <input type="checkbox" v-model="task.completed"> 
         {{ task.text }}
       </label>
@@ -75,3 +74,10 @@ function shouldDisplay(task: {id?: number, text: string, completed: boolean}){
   </div>
   </main>
 </template>
+
+<style scoped>
+.todocolor{
+  background-color: #00b1d2;
+  color: white; 
+}
+</style>
