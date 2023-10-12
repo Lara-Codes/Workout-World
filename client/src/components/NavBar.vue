@@ -16,36 +16,36 @@ function drop(){
   <nav class="navbar is-primary" role="navigation" aria-label="main navigation">
     <div class="navbar-item"></div>
     <div class="navbar-brand">
-      <a class="navbar-item">
+      <RouterLink class="navbar-item" to="/">
         <img src="@/assets/logo.svg" width="28" height="28">
-      </a>
+      </RouterLink>
     </div>
     <div id="navbarBasicExample" class="navbar-menu">
       <div class="navbar-start">
-        <a class="navbar-item">
+        <RouterLink class="navbar-item" to="/activity">
           <span class="icon">
             <i class="fas fa-running"></i>
           </span>
           My Activity
-        </a>
-        <a class="navbar-item">
+        </RouterLink>
+        <RouterLink class="navbar-item" to="/stats">
           <span class="icon">
             <i class="fas fa-chart-line"></i>
           </span>
           Statistics
-        </a>
-        <a class="navbar-item">
+        </RouterLink>
+        <RouterLink class="navbar-item" to="/friends">
           <span class="icon">
             <i class="fas fa-users"></i>
           </span>
           Friends Activity
-        </a>
-        <a class="navbar-item">
+        </RouterLink>
+        <RouterLink class="navbar-item" to="/search">
           <span class="icon">
             <i class="fas fa-search"></i>
           </span>
           People Search
-        </a>
+        </RouterLink>
 
         <div class="navbar-item has-dropdown is-hoverable">
           <a class="navbar-link">
@@ -63,9 +63,9 @@ function drop(){
 
       <div class="navbar-end">
         
-        <a class="navbar-item">
+        <RouterLink class="navbar-item" to="signup">
           <strong>Sign up</strong>
-        </a>
+        </RouterLink>
 
         <div class="buttons">
           <div class="dropdown is-active">
