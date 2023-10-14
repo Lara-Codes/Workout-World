@@ -1,14 +1,12 @@
-
 <script setup lang="ts">
 import { ref } from 'vue';
 import { getSession, login } from '../model/session'
 import WorkoutForm from '../components/WorkoutForm.vue';
+import Vue from 'vue';
 
 let show = ref(false);
-// function toggleShow() {
-//   show = !show;
-// }
 const session = getSession()
+
 </script>
 
 <template>
@@ -25,7 +23,7 @@ const session = getSession()
             <button class="button is-medium is-fullwidth" @click="show = !show">Add Workout</button>
           </div>
           <div v-if="show">
-            <WorkoutForm />
+            <WorkoutForm :show="show"/>
           </div>
           <div v-else>
           </div>
