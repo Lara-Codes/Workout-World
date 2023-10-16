@@ -20,7 +20,7 @@ import NavBar from './components/NavBar.vue'
 
   .container{
     background-color: hsl(0, 0%, 100%);
-    box-shadow: 0px 0px 20px #00000074; 
+    box-shadow: 0px 0px 5px #00000074; 
     padding: 5px; 
     min-height: 100vh; 
   }

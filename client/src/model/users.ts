@@ -10,6 +10,7 @@ export interface User {
     password: string,
     role: "admin" | "user", 
     token?: string
+    username: string
 }
 
 export function getUsers(): User[] {

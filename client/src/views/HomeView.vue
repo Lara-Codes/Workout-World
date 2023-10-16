@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { getSession, login } from '../model/session'
   import { ref } from 'vue';
+
   const newTask = ref('');
   const tasks = ref([] as {id?: number, text: string, completed: boolean}[]) // question mark makes id optional
 
@@ -43,6 +44,7 @@
       <p class="panel-heading has-text-dark todocolor">
         To Do
       </p>
+      
       <div class="panel-block">
         <p class="control has-icons-left">
           <input class="input" type="text" placeholder="What do you want to do?" @keypress.enter="addTask"

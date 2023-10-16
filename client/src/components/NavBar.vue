@@ -14,8 +14,9 @@ const session = getSession()
 </script>
 
 <template>
+  <section class="section">
   <!-- NAVBAR  -->
-  <nav class="navbar" role="navigation" aria-label="main navigation">
+  <nav class="navbar is-fixed-top" role="navigation" aria-label="main navigation">
     <div class="navbar-item"></div>
     <div class="navbar-brand">
       <RouterLink class="navbar-item" to="/">
@@ -87,6 +88,7 @@ const session = getSession()
     </div>
 
   </nav>
+</section>
 </template>
 
 <style scoped>

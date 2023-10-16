@@ -3,16 +3,17 @@ import { type User, getUserByEmail } from "./users";
 
 const session = reactive({
   user: null as User | null,
+  redirectUrl: null as string | null
 })
 
-export interface User {
-    id?: string,
-    firstName: string,
-    lastName: string,
-    email: string,
-    role: "admin" | "user",
-    token?: string
-}
+// export interface User {
+//     id?: string,
+//     firstName: string,
+//     lastName: string,
+//     email: string,
+//     role: "admin" | "user",
+//     token?: string
+// }
 
 export function getSession(){
   return session;
