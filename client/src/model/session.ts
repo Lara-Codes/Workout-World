@@ -21,7 +21,7 @@ export function login(){
   session.user = {
     firstName: "Lars",
     lastName: "Palombi",
-    email: "test@user.com",
+    email: "lars@gmail.com",
     role: "admin"
   }
 }
