@@ -1,6 +1,7 @@
 <script setup lang="ts">
-    import { getSession, login, logout } from '../model/session'
+    import { getSession, useLogin } from '../model/session'
     const session = getSession()
+    const { login, logout } = useLogin(); 
 
     const doLogin = () => {
         login('atuny0@sohu.com', '9uQFF1Lh')

@@ -1,16 +1,8 @@
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { getSession, login } from '../model/session'
-const newTask = ref('');
-const tasks = ref([] as string[])
-
-function addTask() {
-  tasks.value.push(newTask.value);
-  newTask.value = '';
-}
-
-const session = getSession()
+  import { ref } from 'vue';
+  import { getSession, login } from '../model/session'
+  const session = getSession()
 </script>
 
 <template>

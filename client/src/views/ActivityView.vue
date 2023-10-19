@@ -18,7 +18,7 @@ const picture = ref('')
 const subject = ref('')
 const distance = ref('')
 
-const activities = ref([] as { title: string, date: string, duration: string, location: string, picture?: string, subject: string, distance: string }[])
+const activities = ref([] as { title: string, date: string, duration: string, location: string, picture?: string, subject: string, distance: number }[])
 
 function addActivity() {
   activities.value.push({ title: title.value, date: date.value, duration: duration.value, location: location.value, picture: picture.value, subject: subject.value, distance: distance.value })
@@ -31,9 +31,10 @@ function addActivity() {
   distance.value = ''
 }
 
-function remove(index: number) {
-  activities.value.splice(index, 1);
-}
+const remove = (index: number) => {
+  const originalIndex = activities.value.length - 1 - index;
+  activities.value.splice(originalIndex, 1);
+};
 
 </script>
 
@@ -82,7 +83,7 @@ function remove(index: number) {
                   <div class="field is-flex is-flex-direction-column has-text-left">
                     <label class="label">Distance</label>
                     <div class="control">
-                      <input class="input" type="text" placeholder="" v-model="distance">
+                      <input class="input" type="text" placeholder="Distance in feet" v-model="distance">
                     </div>
                   </div>
 
@@ -131,7 +132,7 @@ function remove(index: number) {
                   Add Workout
                 </button>
               </div>
-              <div class="box" v-for="(activity, index) in activities.slice().reverse()">
+              <div class="box" v-for="(activity, index) in activities.slice().reverse()" :key="index">
                 <article class="media">
                   <figure class="media-left">
                     <p class="image is-64x64">
@@ -175,7 +176,7 @@ function remove(index: number) {
                     </nav>
                   </div>
                   <div class="media-right">
-                    <button class="delete" @click="remove()"></button>
+                    <button class="delete" @click="remove(index)"></button>
                   </div>
                 </article>
               </div>
