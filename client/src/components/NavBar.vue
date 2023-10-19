@@ -2,10 +2,12 @@
 import { ref } from 'vue';
 import { RouterLink } from 'vue-router';
 import LoginBadge from './LoginBadge.vue';
-import { getSession, login } from '../model/session'
+import { getSession } from '../model/session'
+import FlyoutPanel from './FlyoutPanel.vue';
 
 let dropdown = false;
 let isActive = ref(dropdown)
+const isShoppingCartOpen = ref(false); 
 
 function drop() {
   dropdown = !dropdown;
@@ -87,8 +89,21 @@ const session = getSession()
 
     </div>
 
+    <div class="navbar-end">
+      <div class="navbar-item">
+        <a class="button" :class="{'is-active': isShoppingCartOpen }" @click.prevent="isShoppingCartOpen = !isShoppingCartOpen">
+          <span class="icon">
+            <i class="fas fa-shopping-cart"></i>
+          </span>
+        </a>
+      </div>
+    </div>
+
   </nav>
 </section>
+  <FlyoutPanel :class="{'is-active': isShoppingCartOpen }">
+    <h1 class="subtitle">Shopping Cart</h1>
+  </FlyoutPanel>
 </template>
 
 <style scoped>

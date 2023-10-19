@@ -49,6 +49,7 @@
         border: 1px solid #ccc; 
         background-color: white; 
         box-shadow: 0 0 1rem #0004;
+        z-index: 100; 
     }
 
     .price{
