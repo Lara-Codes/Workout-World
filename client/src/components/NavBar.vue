@@ -21,7 +21,7 @@ const session = getSession()
   <nav class="navbar is-fixed-top" role="navigation" aria-label="main navigation">
     <div class="navbar-item"></div>
     <div class="navbar-brand">
-      <RouterLink class="navbar-item" to="/">
+      <RouterLink class="navbar-item" to="/home">
         <img src="@/assets/logo.svg" width="28" height="28">
       </RouterLink>
     </div>
@@ -59,12 +59,12 @@ const session = getSession()
           </a>
 
           <div class="navbar-dropdown" v-if="session.user">
-            <RouterLink class="navbar-item" to="/login">
+            <RouterLink class="navbar-item" to="/">
               Users
             </RouterLink>
           </div>
           <div class="navbar-dropdown" v-else>
-            <RouterLink class="navbar-item" to="/login">
+            <RouterLink class="navbar-item" to="/">
               Users
             </RouterLink>
           </div>
@@ -89,7 +89,7 @@ const session = getSession()
 
     </div>
 
-    <div class="navbar-end">
+    <!-- <div class="navbar-end">
       <div class="navbar-item">
         <a class="button" :class="{'is-active': isShoppingCartOpen }" @click.prevent="isShoppingCartOpen = !isShoppingCartOpen">
           <span class="icon">
@@ -97,13 +97,13 @@ const session = getSession()
           </span>
         </a>
       </div>
-    </div>
+    </div> -->
 
   </nav>
 </section>
-  <FlyoutPanel :class="{'is-active': isShoppingCartOpen }">
+  <!-- <FlyoutPanel :class="{'is-active': isShoppingCartOpen }">
     <h1 class="subtitle">Shopping Cart</h1>
-  </FlyoutPanel>
+  </FlyoutPanel> -->
 </template>
 
 <style scoped>
