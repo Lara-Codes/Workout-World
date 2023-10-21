@@ -3,7 +3,7 @@ import { ref, computed } from 'vue';
 import { getSession } from '../model/session'
 import { calculateDistance } from '../model/stats'
 import Friends from './Friends.vue';
-import { type Activity, addActivity, activities, remove } from '../model/activities'
+import { type Activity, addActivity, activities, remove, edit } from '../model/activities'
 
 let show = ref(false);
 let close = () => {
@@ -11,9 +11,9 @@ let close = () => {
 }
 
 const session = getSession()
-let userid = 0; 
-if(session.user){
-  userid = session.user.id; 
+let userid = 0;
+if (session.user) {
+  userid = session.user.id;
 }
 
 const formData = ref({
@@ -23,7 +23,7 @@ const formData = ref({
   location: '',
   picture: '',
   subject: '',
-  distance: 0, 
+  distance: 0,
   userid: session.user.id,
   firstname: session.user.firstName,
   lastname: session.user.lastName,
@@ -40,20 +40,22 @@ function addNewActivity() {
     subject: formData.value.subject,
     distance: formData.value.distance,
     userid: session.user.id,
-    firstname: session.user.firstName, 
+    firstname: session.user.firstName,
     lastname: session.user.lastName,
     username: session.user.username
   };
   addActivity(newActivity)
 }
 
-formData.value.title = '';
-formData.value.date = '';
-formData.value.duration = '';
-formData.value.location = '';
-formData.value.picture = '';
-formData.value.subject = '';
-formData.value.distance = 0; // Reset distance as needed
+function resetValues() {
+  formData.value.title = '';
+  formData.value.date = '';
+  formData.value.duration = '';
+  formData.value.location = '';
+  formData.value.picture = '';
+  formData.value.subject = '';
+  formData.value.distance = 0; // Reset distance as needed
+}
 
 const doCalculation = () => {
   calculateDistance(formData.value.distance);
@@ -62,6 +64,9 @@ const doCalculation = () => {
 const myActivities = computed(() =>
   activities.value.filter((activity) => activity.userid === userid)
 );
+
+const editingIndex = ref(-1);
+const editingData = ref({ title: '', date: '', duration: '', location: '', picture: '', subject: '', distance: 0 });
 
 </script>
 
@@ -144,7 +149,8 @@ const myActivities = computed(() =>
                 </div>
               </div>
               <footer class="modal-card-foot">
-                <button class="button is-success" @click.prevent="doCalculation(); addNewActivity(); show = !show;">Save
+                <button class="button is-success"
+                  @click.prevent="doCalculation(); addNewActivity(); show = !show; resetValues()">Save
                   changes</button>
                 <button class="button" @click="show = !show">Cancel</button>
               </footer>
@@ -172,9 +178,10 @@ const myActivities = computed(() =>
                     <p class="is-size-5">
                       <!-- <strong>{{ session.user.firstName }} {{ session.user.lastName }}</strong> <small>@{{
                         session.user.username }}</small>  -->
-                        <strong>{{ activity.firstname }} {{ activity.lastname }}</strong>   <small>{{ activity.username }}</small><br>
-                        
-                        <small>0m</small>
+                      <strong>{{ activity.firstname }} {{ activity.lastname }}</strong> <small>{{ activity.username
+                      }}</small><br>
+
+                      <small>0m</small>
                       <br>
                       {{ activity.title }}
                     </p>
@@ -208,6 +215,7 @@ const myActivities = computed(() =>
                 </div>
                 <div class="media-right">
                   <button class="delete" @click="remove(index)"></button>
+                  <button class="button is-info is-small edit" @click="edit(index)">Edit</button>
                 </div>
               </article>
             </div>
@@ -224,3 +232,9 @@ const myActivities = computed(() =>
     </h2>
   </main>
 </template>
+
+<style scoped>
+.edit {
+  margin: .5rem;
+}
+</style>

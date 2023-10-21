@@ -26,9 +26,22 @@ export interface Activity {
 
 export function addActivity(activity: Activity) {
     activities.value.push(activity);
+    title.value = ''
+    date.value = ''
+    duration.value = ''
+    location.value = ''
+    picture.value = ''
+    subject.value = ''
+    distance.value = ''
 }
 
 export function remove(index: number){
     const originalIndex = activities.value.length - 1 - index;
     activities.value.splice(originalIndex, 1);
   };
+
+export function edit(index: number){
+    if (index >= 0 && index < activities.value.length) {
+        
+    }
+};

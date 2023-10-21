@@ -27,7 +27,7 @@
   <main class="columns is-multiline is-centered">
     
     <div class="column is-full ml-3 mr-3 pt-6 pb-6 pl-4 pr-4">
-      <h1 class="title is-3 hometitle">Home</h1>
+      <h1 class="title is-3 hometitle ml-4">Home</h1>
       <h2 class="subtitle">
         <div v-if="session.user" class="level-item has-text-centered mt-6">
           Welcome to your exercise account, {{ session.user.firstName }} {{ session.user.lastName }}!
