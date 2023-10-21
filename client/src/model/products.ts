@@ -1,6 +1,6 @@
 import data from "@/data/products.json"; 
 
-interface Product {
+export interface Product {
     id: number; 
     title: string; 
     description: string; 

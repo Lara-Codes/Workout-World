@@ -3,7 +3,7 @@
 import data from "../data/users.json"
 
 export interface User {
-    id?: number, 
+    id: number, 
     firstName: string, 
     lastName: string, 
     email: string, 
@@ -11,6 +11,7 @@ export interface User {
     role: "admin" | "user", 
     token?: string
     username: string
+    isVisible?: boolean;
 }
 
 export function getUsers(): User[] {

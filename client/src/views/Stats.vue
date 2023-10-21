@@ -1,8 +1,11 @@
 
 <script setup lang="ts">
-  import { ref } from 'vue';
-  import { getSession, login } from '../model/session'
-  const session = getSession()
+import { getSession } from '../model/session'
+import { getCurrentDistance } from '@/model/stats';
+const session = getSession()
+
+const distance = getCurrentDistance();
+
 </script>
 
 <template>
@@ -26,6 +29,7 @@
                     <h1 class="title is-1 has-text-info">0ft</h1>
                     <caption class="caption">Distance</caption>
                   </div>
+
                 </div>
                 <div class="column">
                   <div class="bd-notification is-info is-half">
@@ -97,14 +101,19 @@
               <div class="columns is-mobile level-item has-text-centered is-multiline">
                 <div class="column">
                   <div class="bd-notification is-info is-half">
-                    <h1 class="title is-1 has-text-info">0ft</h1>
-                    <caption class="caption">Distance</caption>
+
+                    <h1 class="title is-1 has-text-info">{{ distance }}ft</h1>
+                    <div class="d-container level has-text-centered">
+                      <caption class="caption">Distance</caption>
+                    </div>
                   </div>
                 </div>
                 <div class="column">
                   <div class="bd-notification is-info is-half">
                     <h1 class="title is-1 has-text-info	">0:0</h1>
-                    <caption class="caption">Duration</caption>
+                    <div class="d-container">
+                      <caption class="caption">Duration</caption>
+                    </div>
                   </div>
                 </div>
 
@@ -137,3 +146,10 @@
     </div>
   </main>
 </template>
+
+<style scoped>
+.d-container {
+  display: flex;
+  align-items: center;
+}
+</style>

@@ -2,7 +2,7 @@
   import { getSession, useLogin } from '@/model/session'
 
   const session = getSession()
-  const { login, logout } = useLogin()
+  const { logout } = useLogin()
 
   const doLogout = () => {
     logout();

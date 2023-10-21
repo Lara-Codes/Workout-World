@@ -22,53 +22,41 @@ const router = createRouter({
       name: 'activity',
       component: () => import('../views/ActivityView.vue'),
       beforeEnter: requireLogin,
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
     },
     {
       path: '/friends',
       name: 'friends',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/Friends.vue'),
       beforeEnter: requireLogin,
     },
     {
       path: '/search',
       name: 'search',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/Search.vue'),
       beforeEnter: requireLogin,
     },
     {
       path: '/signup',
       name: 'signup',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/Signup.vue'),
       beforeEnter: requireLogin,
     },
     {
       path: '/stats',
       name: 'stats',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/Stats.vue'),
       beforeEnter: requireLogin,
     },
     {
       path: '/products',
       name: 'products',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/ProductList.vue'),
+      beforeEnter: requireLogin,
+    },
+    {
+      path: '/users',
+      name: 'users',
+      component: () => import('../views/UserView.vue'),
       beforeEnter: requireLogin,
     },
   ]

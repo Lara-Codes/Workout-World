@@ -23,7 +23,6 @@ export function useLogin(){
       const user = getUserByEmail(email);
       if(user && user.password === password){
         session.user = user;
-        console.log("test")
         router.push(session.redirectUrl || "/home");
 
         return user;

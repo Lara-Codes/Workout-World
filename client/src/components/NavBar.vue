@@ -7,89 +7,106 @@ import FlyoutPanel from './FlyoutPanel.vue';
 
 let dropdown = false;
 let isActive = ref(dropdown)
-const isShoppingCartOpen = ref(false); 
+const isShoppingCartOpen = ref(false);
 
 function drop() {
   dropdown = !dropdown;
 }
 const session = getSession()
+
+function toggleMenu() {
+  isActive.value = !isActive.value;
+}
+
 </script>
 
 <template>
   <section class="section">
-  <!-- NAVBAR  -->
-  <nav class="navbar is-fixed-top" role="navigation" aria-label="main navigation">
-    <div class="navbar-item"></div>
-    <div class="navbar-brand">
-      <RouterLink class="navbar-item" to="/home">
-        <img src="@/assets/logo.svg" width="28" height="28">
-      </RouterLink>
-    </div>
-    <div id="navbarBasicExample" class="navbar-menu">
-      <div class="navbar-start">
-        <RouterLink class="navbar-item" to="/activity">
-          <span class="icon">
-            <i class="fas fa-running"></i>
-          </span>
-          My Activity
-        </RouterLink>
-        <RouterLink class="navbar-item" to="/stats">
-          <span class="icon">
-            <i class="fas fa-chart-line"></i>
-          </span>
-          Statistics
-        </RouterLink>
-        <RouterLink class="navbar-item" to="/friends">
-          <span class="icon">
-            <i class="fas fa-users"></i>
-          </span>
-          Friends Activity
-        </RouterLink>
-        <RouterLink class="navbar-item" to="/search">
-          <span class="icon">
-            <i class="fas fa-search"></i>
-          </span>
-          People Search
-        </RouterLink>
+    <!-- NAVBAR  -->
 
-        <div class="navbar-item has-dropdown is-hoverable">
+    <nav class="navbar is-fixed-top" role="navigation" aria-label="main navigation">
 
-          <a class="navbar-link">
-            Admin
-          </a>
-
-          <div class="navbar-dropdown" v-if="session.user">
-            <RouterLink class="navbar-item" to="/">
-              Users
-            </RouterLink>
-          </div>
-          <div class="navbar-dropdown" v-else>
-            <RouterLink class="navbar-item" to="/">
-              Users
-            </RouterLink>
-          </div>
-
-        </div>
+      <div class="navbar-item"></div>
+      <div class="navbar-brand">
+        <RouterLink class="navbar-item" to="/home">
+          <img src="@/assets/logo.svg" width="28" height="28">
+        </RouterLink>
       </div>
 
-      <div class="navbar-end">
-        <div class="navbar-item">
-          <LoginBadge />
+      <div id="navbarBasicExample" class="navbar-menu">
+        <div class="navbar-start">
+          <RouterLink class="navbar-item" to="/activity">
+            <span class="icon">
+              <i class="fas fa-running"></i>
+            </span>
+            My Activity
+          </RouterLink>
+          <RouterLink class="navbar-item" to="/stats">
+            <span class="icon">
+              <i class="fas fa-chart-line"></i>
+            </span>
+            Statistics
+          </RouterLink>
+          <RouterLink class="navbar-item" to="/friends">
+            <span class="icon">
+              <i class="fas fa-users"></i>
+            </span>
+            Friends Activity
+          </RouterLink>
+          <RouterLink class="navbar-item" to="/search">
+            <span class="icon">
+              <i class="fas fa-search"></i>
+            </span>
+            People Search
+          </RouterLink>
+
+          <div class="navbar-item has-dropdown is-hoverable">
+
+            <a class="navbar-link">
+              Users
+            </a>
+
+            <!-- If there is a user: -->
+            <div class="navbar-dropdown" v-if="session.user">
+              <div v-if="session.user.role==='admin'">
+                <RouterLink class="navbar-item" to="/users">
+                  Users
+                </RouterLink>
+              </div>
+              <div v-else>
+                <RouterLink class="navbar-item" to="/">
+                  Admin
+                </RouterLink>
+              </div>
+            </div>
+
+            <div class="navbar-dropdown" v-else>
+              <RouterLink class="navbar-item" to="/">
+                Users
+              </RouterLink>
+            </div>
+
+          </div>
         </div>
 
-        <button class="button">
-          <span class="icon">
-            <i class="fab fa-twitter"></i>
-          </span>
-          <a href="https://twitter.com/i/flow/login?redirect_after_login=%2Fintent%2Ftweet%3Ftext%3DBulma%3A%2520a%2520modern%2520CSS%2520framework%2520based%2520on%2520Flexbox%26hashtags%3Dbulmaio%26url%3Dhttps%3A%2F%2Fbulma.io%26via%3Djgthms"
-            target="_blank" style="color:inherit"><span>Tweet</span></a>
-        </button>
+        <div class="navbar-end">
+          <div class="navbar-item">
+            <LoginBadge />
+          </div>
+
+          <button class="button">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+            <a href="https://twitter.com/i/flow/login?redirect_after_login=%2Fintent%2Ftweet%3Ftext%3DBulma%3A%2520a%2520modern%2520CSS%2520framework%2520based%2520on%2520Flexbox%26hashtags%3Dbulmaio%26url%3Dhttps%3A%2F%2Fbulma.io%26via%3Djgthms"
+              target="_blank" style="color:inherit"><span>Tweet</span></a>
+          </button>
+
+        </div>
 
       </div>
 
-    </div>
-
-    <!-- <div class="navbar-end">
+      <!-- <div class="navbar-end">
       <div class="navbar-item">
         <a class="button" :class="{'is-active': isShoppingCartOpen }" @click.prevent="isShoppingCartOpen = !isShoppingCartOpen">
           <span class="icon">
@@ -99,8 +116,8 @@ const session = getSession()
       </div>
     </div> -->
 
-  </nav>
-</section>
+    </nav>
+  </section>
   <!-- <FlyoutPanel :class="{'is-active': isShoppingCartOpen }">
     <h1 class="subtitle">Shopping Cart</h1>
   </FlyoutPanel> -->
