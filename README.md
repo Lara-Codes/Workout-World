@@ -12,4 +12,3 @@ Looking forward to taking the class!
 
 Lara Palombi 
 
-![Picture of me!](./me.png)
