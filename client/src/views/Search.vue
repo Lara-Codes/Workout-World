@@ -1,7 +1,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { getSession, login } from '../model/session'
+import { getSession } from '../model/session'
 const newTask = ref('');
 const tasks = ref([] as string[])
 
