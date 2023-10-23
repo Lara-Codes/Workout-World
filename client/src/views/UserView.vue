@@ -1,7 +1,9 @@
 
 <script setup lang="ts">
+import { ref, computed } from 'vue';
 import { getSession } from '../model/session'
-import { getUsers, type User, removeUser, users } from '@/model/users';
+import { getUsers, type User, users, remove } from '@/model/users';
+
 </script>
 
 <template>
@@ -27,14 +29,14 @@ import { getUsers, type User, removeUser, users } from '@/model/users';
                 </tr>
             </thead>
 
-            <tr v-for="user in users" :key="user.id">
+            <tr v-for="(user, index) in users" :key="index">
                 <td>{{ user.id }}</td>
                 <td>{{ user.firstName }}</td>
                 <td>{{ user.lastName }}</td>
                 <td>{{ user.email }}</td>
                 <td>{{ user.role }}</td>
                 <td>
-                    <button @click="removeUser(user.id)">
+                    <button @click="remove(index)">
                         <span class="icon is-small is-right">
                             <i class="fas fa-trash"></i>
                         </span>
