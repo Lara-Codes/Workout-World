@@ -6,6 +6,9 @@ import Friends from './Friends.vue';
 import { type Activity, addActivity, activities, remove, edit } from '../model/activities'
 
 let show = ref(false);
+let editing = ref(false)
+let post = ref(-1)
+
 let close = () => {
   show.value = !show.value;
 }
@@ -24,14 +27,15 @@ const formData = ref({
   picture: '',
   subject: '',
   distance: 0,
-  userid: session.user.id,
-  firstname: session.user.firstName,
-  lastname: session.user.lastName,
-  username: session.user.username
+  userid: session.user?.id || '',
+  firstname: session.user?.firstName || '',
+  lastname: session.user?.lastName || '',
+  username: session.user?.username || ''
 });
 
 function addNewActivity() {
-  const newActivity = {
+  if(editing.value===false){
+    const newActivity = {
     title: formData.value.title,
     date: formData.value.date,
     duration: formData.value.duration,
@@ -39,13 +43,32 @@ function addNewActivity() {
     picture: formData.value.picture,
     subject: formData.value.subject,
     distance: formData.value.distance,
-    userid: session.user.id,
-    firstname: session.user.firstName,
-    lastname: session.user.lastName,
-    username: session.user.username
+    userid: session.user?.id || 0,
+    firstname: session.user?.firstName || '',
+    lastname: session.user?.lastName || '',
+    username: session.user?.username || ''
   };
-  addActivity(newActivity)
+    addActivity(newActivity)
+  } else{
+      const newActivity = {
+      title: formData.value.title,
+      date: formData.value.date,
+      duration: formData.value.duration,
+      location: formData.value.location,
+      picture: formData.value.picture,
+      subject: formData.value.subject,
+      distance: formData.value.distance,
+      userid: session.user?.id || 0,
+      firstname: session.user?.firstName || '',
+      lastname: session.user?.lastName || '',
+      username: session.user?.username || ''
+    };
+    edit(newActivity, post.value)
+    editing.value = false; 
+    post.value = -1; 
+  }
 }
+
 
 function resetValues() {
   formData.value.title = '';
@@ -64,9 +87,6 @@ const doCalculation = () => {
 const myActivities = computed(() =>
   activities.value.filter((activity) => activity.userid === userid)
 );
-
-const editingIndex = ref(-1);
-const editingData = ref({ title: '', date: '', duration: '', location: '', picture: '', subject: '', distance: 0 });
 
 </script>
 
@@ -150,9 +170,9 @@ const editingData = ref({ title: '', date: '', duration: '', location: '', pictu
               </div>
               <footer class="modal-card-foot">
                 <button class="button is-success"
-                  @click.prevent="doCalculation(); addNewActivity(); show = !show; resetValues()">Save
+                  @click.prevent="doCalculation(); addNewActivity(); show = !show; resetValues();">Save
                   changes</button>
-                <button class="button" @click="show = !show">Cancel</button>
+                <button class="button" @click="show = !show; editing=false">Cancel</button>
               </footer>
             </div>
           </div>
@@ -215,7 +235,7 @@ const editingData = ref({ title: '', date: '', duration: '', location: '', pictu
                 </div>
                 <div class="media-right">
                   <button class="delete" @click="remove(index)"></button>
-                  <button class="button is-info is-small edit" @click="edit(index)">Edit</button>
+                  <button class="button is-info is-small edit" @click="show=!show; editing = true; post=index">Edit</button>
                 </div>
               </article>
             </div>

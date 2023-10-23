@@ -1,22 +1,7 @@
 
 <script setup lang="ts">
 import { getSession } from '../model/session'
-import { getUsers, type User } from '@/model/users';
-
-let users = getUsers().map(user => ({ ...user, isVisible: false }));
-
-const removeUser = (userId: number | undefined) => {
-  console.log(`Removing user with ID: ${userId}`);
-  if (userId !== undefined) {
-    users = users.filter(user => user.id !== userId);
-    console.log(`Users after removal:`, users);
-  }
-};
-
-const toggleVisibility = (user: User) => {
-  user.isVisible = !user.isVisible;
-};
-
+import { getUsers, type User, removeUser, users } from '@/model/users';
 </script>
 
 <template>
@@ -42,14 +27,14 @@ const toggleVisibility = (user: User) => {
                 </tr>
             </thead>
 
-            <tr v-for="user in users" :key="user.id" :class="{ 'is-hidden': user.isVisible }">
+            <tr v-for="user in users" :key="user.id">
                 <td>{{ user.id }}</td>
                 <td>{{ user.firstName }}</td>
                 <td>{{ user.lastName }}</td>
                 <td>{{ user.email }}</td>
                 <td>{{ user.role }}</td>
                 <td>
-                    <button @click="toggleVisibility(user)">
+                    <button @click="removeUser(user.id)">
                         <span class="icon is-small is-right">
                             <i class="fas fa-trash"></i>
                         </span>
@@ -61,14 +46,12 @@ const toggleVisibility = (user: User) => {
                     </button>
                 </td>
             </tr>
-
-
         </table>
     </div>
 </template>
 
 <style scoped>
-    button{
-        margin: .5rem;
-    }
+button {
+    margin: .5rem;
+}
 </style>

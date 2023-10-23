@@ -2,6 +2,8 @@
 */
 import data from "../data/users.json"
 
+export let allusers = data.users.map((user) => ({ ...user, role: user.id <= 5 ? 'admin' : 'user', isVisible: true }));
+export let users = allusers.filter((user) => user.isVisible);
 export interface User {
     id: number, 
     firstName: string, 
@@ -21,3 +23,11 @@ export function getUsers(): User[] {
 export function getUserByEmail(email: string): User | undefined {
     return getUsers().find( x => x.email === email)
 }
+
+export function removeUser(userId: number) {
+    const user = users.find((u) => u.id === userId);
+    if (user) {
+    console.log(user.firstName);
+      user.isVisible = false;
+    }
+  }
