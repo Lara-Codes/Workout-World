@@ -4,6 +4,7 @@
   import LoginBadge from './LoginBadge.vue';
   import { getSession } from '../model/session'
   import FlyoutPanel from './FlyoutPanel.vue';
+  import ShoppingCart from './ShoppingCart.vue'
 
   const isShoppingCartOpen = ref(false);
 
@@ -165,7 +166,7 @@
     </nav>
   </section>
   <!-- <FlyoutPanel :class="{'is-active': isShoppingCartOpen }">
-    <h1 class="subtitle">Shopping Cart</h1>
+    <ShoppingCart />
   </FlyoutPanel> -->
 </template>
 
