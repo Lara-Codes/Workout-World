@@ -1,14 +1,25 @@
 // Vanilla node server
+const path = require('path')
 const express = require("express");
-const productController = require('./controllers/product');
+const productController = require('./controllers/products');
 const app = express(); 
 
 const PORT = 3000; 
 
-app.get('/', (req, res) => { // if get do this function, if post do that function, if delete do that function, etc.. 
-    res.send('Hello world!');
-})
-.use('/products', productController);
+// app.get('/', (req, res) => { // if get do this function, if post do that function, if delete do that function, etc.. 
+//     res.send('Hello world!');
+// })
+// .use('/api/v1/products', productController);
+app 
+    .use('/', express.static(path.join(__dirname, '../client/dist')))
+    .use(express.json())
+
+    .use('/api/v1/products', productController)
+
+
+    .get('*', (req, res) => {
+        res.sendFile(path.join(__dirname, '../client/dist/index.html'))
+    })
 
 // if you arent changing the state, maybe use a get. 
 // if you're creating a new detail/adding info, post. Like if ur submitting a form and are adding info to the state of the server. 
@@ -17,8 +28,6 @@ app.get('/', (req, res) => { // if get do this function, if post do that functio
 // if you are deleting, use DELETE. 
 
 // we can map everything out but it might get long/heavy. instead use modules. 
-
-console.log('1: Trying to start server...')
 
 app.listen(PORT, () => {
     console.log(`2: Server is running at http://localhost:${PORT}`)

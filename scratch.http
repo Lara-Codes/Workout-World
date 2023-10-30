@@ -1,0 +1,12 @@
+###
+POST https://dummyjson.com/products/add
+Content-Type: application/json
+
+{
+    "id": 101, 
+    "title": "Pumpkin", 
+    "price": 3.56
+}
+
+### 
+http://localhost:3000/products
