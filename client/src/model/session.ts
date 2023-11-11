@@ -2,6 +2,7 @@
 */
 import { reactive } from "vue";
 import { useRouter } from "vue-router"
+import * as myFetch from "./myFetch"
 import { type User, getUserByEmail } from "./users";
 
 const session = reactive({
@@ -9,7 +10,9 @@ const session = reactive({
   redirectUrl: null as string | null,
 })
 
-
+export function api(action: string){
+  return myFetch.api(`${action}`)
+}
 
 export function getSession(){
   return session;

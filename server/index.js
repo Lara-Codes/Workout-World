@@ -10,9 +10,17 @@ const PORT = 3000;
 //     res.send('Hello world!');
 // })
 // .use('/api/v1/products', productController);
+
 app 
     .use('/', express.static(path.join(__dirname, '../client/dist')))
     .use(express.json())
+
+    // CORS
+    .use((req, res, next) => {
+        res.header('Access-Control-Allow-Origin', '*');
+        res.header('Access-Control-Allow-Methods', '*'); 
+        next()
+    })
 
     .use('/api/v1/products', productController)
 

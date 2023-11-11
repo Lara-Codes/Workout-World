@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import { getSession } from '../model/session'
+  import { getUsers, type User } from '@/model/users'
   import { ref } from 'vue';
 
   const newTask = ref('');
@@ -18,6 +19,12 @@
     (tabState.value == 'Completed' && task.completed) ||
     tabState.value == 'All'; 
   }
+
+  // const users = ref([] as User[]);
+  // getUsers().then((data) => {
+  //   users.value = data; 
+  // });
+  // getUsers()
 
   // Saying welcome user if user 
   const session = getSession()
