@@ -6,11 +6,6 @@ const app = express();
 
 const PORT = 3000; 
 
-// app.get('/', (req, res) => { // if get do this function, if post do that function, if delete do that function, etc.. 
-//     res.send('Hello world!');
-// })
-// .use('/api/v1/products', productController);
-
 app 
     .use('/', express.static(path.join(__dirname, '../client/dist')))
     .use(express.json())

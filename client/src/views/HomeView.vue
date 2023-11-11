@@ -20,11 +20,11 @@
     tabState.value == 'All'; 
   }
 
-  // const users = ref([] as User[]);
-  // getUsers().then((data) => {
-  //   users.value = data; 
-  // });
-  // getUsers()
+  const users = ref([] as User[]);
+  getUsers().then((data) => {
+    users.value = data; 
+  });
+  getUsers()
 
   // Saying welcome user if user 
   const session = getSession()
