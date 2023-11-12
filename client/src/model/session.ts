@@ -6,11 +6,6 @@ import * as myFetch from "./myFetch"
 import { type User, getUserByEmail } from "./users";
 import { useToast } from "vue-toastification";
 
-// const session = reactive({
-//   user: null as User | null,
-//   redirectUrl: null as string | null,
-// })
-
 const toast = useToast();
 
 const session = reactive({
@@ -31,33 +26,10 @@ export function api(action: string, body?: unknown, method?: string){
     .finally(()=> session.loading--);
 }
 
-
 export function getSession(){
   return session;
 }
 
-
-// export function useLogin(){
-//   const router = useRouter();
-
-//   return {
-//     login(email: string, password: string): User | null {
-//       const user = getUserByEmail(email);
-//       if(user && user.password === password){
-//         session.user = user;
-//         router.push(session.redirectUrl || "/home");
-
-//         return user;
-//       }
-//       return null;
-//     },
-//     logout(){
-//       session.user = null;
-//       router.push(session.redirectUrl || "/");
-//     }
-//   }
-  
-// }
 export function showError(err: any){
   console.error(err);
   session.messages.push({ type: "error", text: err.message ?? err});
@@ -70,12 +42,12 @@ export function useLogin(){
   return {
     async login(email: string, password: string): Promise< User | null> {
       session.user = await api("users/login", { email, password });
-      router.push(session.redirectUrl || "/");
+      router.push(session.redirectUrl || "/home");
       return session.user;
     },
     logout(){
       session.user = null;
-      router.push("/login");
+      router.push("/");
     }
   }
 }

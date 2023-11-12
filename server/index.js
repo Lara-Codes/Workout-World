@@ -1,7 +1,7 @@
-// Vanilla node server
 const path = require('path')
 const express = require("express");
 const productController = require('./controllers/products');
+const userController = require('./controllers/users');
 const app = express(); 
 
 const PORT = 3000; 
@@ -13,12 +13,13 @@ app
     // CORS
     .use((req, res, next) => {
         res.header('Access-Control-Allow-Origin', '*');
-        res.header('Access-Control-Allow-Methods', '*'); 
-        next()
+        res.header('Access-Control-Allow-Methods', '*');
+        res.header('Access-Control-Allow-Headers', '*');
+        next();
     })
 
     .use('/api/v1/products', productController)
-
+    .use('/api/v1/users', userController)
 
     .get('*', (req, res) => {
         res.sendFile(path.join(__dirname, '../client/dist/index.html'))
