@@ -10,8 +10,6 @@ const mongo = require('./models/mongo')
 const PORT = process.env.PORT ?? 3000; 
 console.log(`The best class at SUNY New Paltz is ${process.env.BEST_CLASS}`);
 
-// const PORT = 3000; 
-
 app 
     .use('/', express.static(path.join(__dirname, '../client/dist')))
     .use(express.json())

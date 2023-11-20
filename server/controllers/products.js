@@ -5,10 +5,13 @@ const express = require('express');
 const { getAll, get, search, create, update, remove } = require('../models/products');
 const router = express.Router();
 
-router.get('/', (req, res, next) => {
-
-    res.send(getAll());
-
+router.get('/', (req, res, next) => { //Cant't use async/await when using express bc doesnt handle errors well. must use promises
+    // res.send(getAll());
+    getAll()
+    .then((products) => {
+      res.send(products);
+    })
+    .catch(next) //catch an error pass it to next 
 })
 .get('/search' , (req, res, next) => {
 
