@@ -1,7 +1,7 @@
 /* B"H
 */
 
-const API_ROOT = import.meta.env.VITE_API_ROOT as string; 
+const API_ROOT = import.meta.env.VITE_API_ROOT as string;
 
 export function rest(url: string, body?: unknown, method?: string){
     return fetch(url, {
@@ -15,12 +15,13 @@ export function rest(url: string, body?: unknown, method?: string){
             ? response.json()
             : response.json().then(err => Promise.reject(err))
         )
-
 }
 
 export function api(action: string, body?: unknown, method?: string){
     return rest(`${API_ROOT}/${action}`, body, method);
 }
+
+
 
 /*  Asynchronous patterns in JavaScript
     1. Callbacks
