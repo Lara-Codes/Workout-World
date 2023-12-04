@@ -5,8 +5,9 @@
 const express = require('express');
 const { getAll, get, search, create, update, remove, login, register } = require('../models/users');
 const router = express.Router();
+const {requireUser} = require('../middleware/authorization')
 
-router.get('/', (req, res, next) => {
+router.get('/', requireUser(true), (req, res, next) => {
 
     res.send(getAll());
 
@@ -41,14 +42,14 @@ router.get('/', (req, res, next) => {
     }).catch(next)
     // const user = login(req.body.email, req.body.password);
 })
-.patch('/:id', (req, res, next) => {
+.patch('/:id', requireUser(), (req, res, next) => {
     
     req.body.id = +req.params.id;
     const user = update(req.body);
     res.send(user);
   
 })
-.delete('/:id', (req, res, next) => {
+.delete('/:id', requireUser(true), (req, res, next) => {
     
     remove(+req.params.id);
     res.send({message: 'User removed'});

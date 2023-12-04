@@ -3,9 +3,10 @@ const express = require("express");
 require('dotenv').config() // only need to call once for setup 
 const productController = require('./controllers/products');
 const userController = require('./controllers/users');
-const app = express(); 
+const app = express();  
 
-const mongo = require('./models/mongo')
+const mongo = require('./models/mongo');
+const { parseAuthorizationToken } = require('./middleware/authorization');
 
 const PORT = process.env.PORT ?? 3000; 
 console.log(`The best class at SUNY New Paltz is ${process.env.BEST_CLASS}`);
@@ -19,16 +20,15 @@ app
         res.header('Access-Control-Allow-Origin', '*');
         res.header('Access-Control-Allow-Methods', '*');
         res.header('Access-Control-Allow-Headers', '*');
+        if(req.method === 'options'){
+            
+        }
         next();
     })
 
-    .use((req, res, next) => {
-        console.log(`Request: ${req.method} ${req.url}`)
-        console.log(`Authorization: ${req.headers.authorization}`)
-        next()
-    })
+    .use(parseAuthorizationToken)
 
-    .use('/api/v1/products', productController)
+    .use('/api/v1/products', requireUser(), productController)
     .use('/api/v1/users', userController)
 
     .get('*', (req, res) => {
