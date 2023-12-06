@@ -14,8 +14,8 @@ export function rest(url: string, body?: unknown, method?: string, headers?: Hea
     })
         .then(response => response.ok 
             ? response.json()
-            : response.json().then(err => Promise.reject(err))
-        )
+            : response.json().then(err => Promise.reject(err))    )
+
 }
 
 export function api(action: string, body?: unknown, method?: string, headers?: HeadersInit){

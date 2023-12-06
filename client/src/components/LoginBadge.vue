@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { getSession, useLogin } from '@/model/session'
+  import { getSession, useLogin, showError } from '@/model/session'
 
   const session = getSession()
   const { logout } = useLogin()
@@ -14,6 +14,14 @@
   <div class="has-text-right" v-if="session.user">
     Welcome, {{ session.user.firstName }} {{ session.user.lastName }} <br>
     <small>
+      Edit User Data 
+      <a class="button is-small is-light is-warning" @click.prevent="">
+        <span class="icon">
+          <i class="fas fa-edit"></i>
+        </span>
+      </a>
+    </small>
+    <small>
       {{ session.user.email }}
       <a class="button is-small is-light is-warning" @click.prevent="doLogout">
         <span class="icon">
@@ -24,7 +32,7 @@
   </div>
   
   <div class="buttons" v-else>
-    <a class="button is-primary">
+    <a class="button is-primary" href="/signup">
       <strong>Sign up</strong>
     </a>
     <a class="button is-light" href="/">

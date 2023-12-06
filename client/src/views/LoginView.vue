@@ -8,17 +8,8 @@
     const email = ref('')
     const password = ref('')
 
-    const credentials = ref([] as {email: string, password: string}[])
-
     const doLogin = () => {
-        // login('hbingley1@plala.or.jp', 'CQutx25i8r')
         login(email.value, password.value)
-    }
-
-    function addCredentials(){
-        credentials.value.push({email: email.value, password: password.value})
-        email.value = ''
-        password.value=''
     }
 
 </script>
