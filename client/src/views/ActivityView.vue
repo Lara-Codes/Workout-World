@@ -1,24 +1,43 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, onMounted } from 'vue';
 import { getSession } from '../model/session'
 import { calculateDistance } from '../model/stats'
+import { type Activity, postData, useCreate, useDelete, useEdit } from '../model/activities'
+const { create } = useCreate()
+const { remove } = useDelete()
+const { edit } = useEdit()
 
-import { type Activity, addActivity, activities, remove, edit, useCreate } from '../model/activities'
-const {create} = useCreate()
 let show = ref(false);
+let showEdit = ref(false);
 let editing = ref(false)
 let post = ref(-1)
 
-let close = () => {
-  show.value = !show.value;
-}
-
 const session = getSession()
 
-// let userid = 0;
-// if (session.user) {
-//   userid = session.user.id;
-// }
+let posts = ref<Array<{ title: string; date: string; duration: string; distance: string, location: string, subject: string }>>([]);
+onMounted(async () => {
+  try {
+    if (session.user) {
+      const result = await postData().data(session.user.email);
+      posts.value = result.posts
+    }
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+const removePost = async (index: number) => {
+  try {
+    if (session.user) {
+      const reversedIndex = posts.value.length - 1 - index;
+      posts.value.splice(reversedIndex, 1);
+      await remove(session.user.email, posts.value);
+    }
+  } catch (error) {
+    console.error('Error removing post:', error);
+  }
+};
+
 
 const title = ref('')
 const date = ref('')
@@ -27,68 +46,63 @@ const location = ref('')
 const subject = ref('')
 const distance = ref('')
 
-const doPost = () => {
-  if(session.user){
-    create(session.user.email, title.value, date.value, duration.value, location.value, subject.value, distance.value)
+const doPost = async () => {
+  if (session.user) {
+    try {
+      // Create the post using the create method
+      await create(session.user.email, title.value, date.value, duration.value, distance.value, location.value, subject.value);
+
+      // Retrieve the updated posts from the server (assuming your backend returns the updated list of posts)
+      const result = await postData().data(session.user.email);
+
+      // Update the posts array with the new data
+      posts.value = result.posts;
+
+      // Reset form fields or perform any other necessary actions
+      title.value = '';
+      date.value = '';
+      duration.value = '';
+      distance.value = '';
+      subject.value = '';
+      location.value = '';
+
+      // Close the modal
+      show.value = false;
+    } catch (error) {
+      console.error('Error adding post:', error);
+    }
   }
 }
+const newtitle = ref('')
+const newdate = ref('')
+const newduration = ref('')
+const newlocation = ref('')
+const newsubject = ref('')
+const newdistance = ref('')
 
-// const formData = ref({
-//   title: '',
-//   date: '',
-//   duration: '',
-//   location: '',
-//   subject: '',
-//   distance: 0,
-  // userid: session.user?.id || '',
-  // firstname: session.user?.firstName || '',
-  // lastname: session.user?.lastName || '',
-  // username: session.user?.username || ''
-// });
+const i = ref(0)
+const getIndex = (index: number) => {
+  const reversedIndex = posts.value.length - 1 - index;
+  i.value = reversedIndex
+}
 
-// function addNewActivity() {
-//   if(editing.value===false){
-//     const newActivity = {
-//     title: formData.value.title,
-//     date: formData.value.date,
-//     duration: formData.value.duration,
-//     location: formData.value.location,
-//     subject: formData.value.subject,
-//     distance: formData.value.distance,
-//     userid: session.user?.id || 0,
-//     firstname: session.user?.firstName || '',
-//     lastname: session.user?.lastName || '',
-//     username: session.user?.username || ''
-//   };
-//     addActivity(newActivity)
-//   } else{
-//       const newActivity = {
-//       title: formData.value.title,
-//       date: formData.value.date,
-//       duration: formData.value.duration,
-//       location: formData.value.location,
-//       subject: formData.value.subject,
-//       distance: formData.value.distance,
-//       userid: session.user?.id || 0,
-//       firstname: session.user?.firstName || '',
-//       lastname: session.user?.lastName || '',
-//       username: session.user?.username || ''
-//     };
-//     edit(newActivity, post.value)
-//     editing.value = false; 
-//     post.value = -1; 
-//   }
-// }
+const editPost = async () => {
+  const reversedIndex = posts.value.length - 1 - i.value;
+  const postToUpdate = posts.value[reversedIndex];
+  if (newtitle.value !== '') postToUpdate.title = newtitle.value;
+  if (newdate.value !== '') postToUpdate.date = newdate.value;
+  if (newduration.value !== '') postToUpdate.duration = newduration.value;
+  if (newlocation.value !== '') postToUpdate.location = newlocation.value;
+  if (newsubject.value !== '') postToUpdate.subject = newsubject.value;
+  if (newdistance.value !== '') postToUpdate.distance = newdistance.value;
 
+  // Update the post in the array
+  posts.value[i.value] = postToUpdate;
+  // if(session.user){
+  //   await remove(session.user.email, posts.value);
+  // }
+};
 
-// function resetValues() {
-//   formData.value.title = '';
-//   formData.value.date = '';
-//   formData.value.duration = '';
-//   formData.value.location = '';
-//   formData.value.subject = '';
-//   formData.value.distance = 0; // Reset distance as needed
-// }
 
 // const doCalculation = () => {
 //   calculateDistance(formData.value.distance);
@@ -172,10 +186,9 @@ const doPost = () => {
                 </div>
               </div>
               <footer class="modal-card-foot">
-                <button class="button is-success"
-                  @click.prevent="doPost">Save
+                <button class="button is-success" @click.prevent="doPost">Save
                   changes</button>
-                <button class="button" @click="show = !show; editing=false">Cancel</button>
+                <button class="button" @click="show = !show; editing = false">Cancel</button>
               </footer>
             </div>
           </div>
@@ -189,7 +202,7 @@ const doPost = () => {
               </button>
             </div>
 
-            <!-- <div class="box" v-for="(activity, index) in myActivities.slice().reverse()" :key="index">
+            <div class="box" v-for="(activity, index) in posts.slice().reverse()" :key="index">
               <article class="media">
                 <figure class="media-left">
                   <p class="image is-64x64">
@@ -199,7 +212,8 @@ const doPost = () => {
                 <div class="media-content">
                   <div class="content">
                     <p class="is-size-5">
-                      <strong>{{ activity.firstname }} {{ activity.lastname }}</strong> <small>{{ activity.username
+                      <strong>{{ session.user.firstName }} {{ session.user.lastName }}</strong> <small>{{
+                        session.user.email
                       }}</small><br>
 
                       <small>0m</small>
@@ -235,12 +249,83 @@ const doPost = () => {
                   </nav>
                 </div>
                 <div class="media-right">
-                  <button class="delete" @click="remove(index)"></button>
-                  <button class="button is-info is-small edit" @click="show=!show; editing = true; post=index">Edit</button>
+                  Delete
+                  <button class="delete" @click="removePost(index)"></button>
+                  <button class="button is-info is-small edit"
+                    @click="getIndex(index); showEdit = !showEdit;">Edit</button>
                 </div>
               </article>
-            </div> -->
+            </div>
 
+            <div v-if="showEdit">
+              <div class="modal is-active">
+                <div class="modal-background"></div>
+                <div class="modal-card">
+
+                  <header class="modal-card-head">
+                    <p class="modal-card-title">Edit: Leave fields you don't want to change blank</p>
+                    <button class="delete" @click="showEdit = !showEdit"></button>
+                  </header>
+
+                  <div class="modal-card-body">
+
+                    <div class="field is-flex is-flex-direction-column has-text-left">
+                      <label class="label">Title</label>
+                      <div class="control">
+                        <input class="input" type="text" placeholder="title" v-model="newtitle">
+                      </div>
+                    </div>
+
+                    <div class="field is-flex is-flex-direction-column has-text-left">
+                      <label class="label" for="datePicker">Date:</label>
+                      <input class="input" type="date" id="datePicker" name="date" v-model="newdate">
+                    </div>
+
+                    <div class="field is-flex is-flex-direction-column has-text-left">
+                      <label class="label">Duration</label>
+                      <div class="control">
+                        <input class="input" type="text" placeholder="" v-model="newduration">
+                      </div>
+                    </div>
+
+                    <div class="field is-flex is-flex-direction-column has-text-left">
+                      <label class="label">Distance</label>
+                      <div class="control">
+                        <input class="input" type="number" placeholder="Distance in feet" v-model="newdistance">
+                      </div>
+                    </div>
+
+                    <div class="field is-flex is-flex-direction-column has-text-left">
+                      <label class="label">Location</label>
+                      <div class="control">
+                        <input class="input" type="text" placeholder="" v-model="newlocation">
+                      </div>
+                    </div>
+
+                    <div class="field field is-flex is-flex-direction-column has-text-left">
+                      <label class="label">Subject</label>
+                      <div class="control">
+                        <div class="select">
+                          <select v-model="newsubject">
+                            <option>Select dropdown</option>
+                            <option>Run</option>
+                            <option>Bike</option>
+                            <option>Walk</option>
+                            <option>Cardio</option>
+                            <option>Strength</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <footer class="modal-card-foot">
+                    <button class="button is-success" @click.prevent="editPost(); showEdit=!showEdit">Save
+                      changes</button>
+                    <button class="button" @click="showEdit = !showEdit;">Cancel</button>
+                  </footer>
+                </div>
+              </div>
+            </div>
 
           </div>
         </div>

@@ -12,16 +12,62 @@ async function addPost(email, title, date, duration, distance, location, subject
     const usersCollection = db.collection('users');
     const user = await usersCollection.findOne({ email });
     if (!user) {
-        return res.status(404).json({ success: false, message: 'User not found.' });
+        return { success: false, message: 'User not found.' };
     }
-    if (!user.posts) {
-        user.posts = [];
+    const result = await usersCollection.updateOne(
+        { email },
+        {
+            $set: {
+                posts: [
+                    ...(user.posts || []), // Preserve existing posts (if any)
+                    { title, date, duration, distance, location, subject }
+                ]
+            }
+        }
+    );
+    if (result.matchedCount === 0) {
+        return { success: false, message: 'Post not added.' };
     }
-    user.posts.push({ title, date, duration, distance, location, subject });
 
-    res.status(201).json({ success: true, message: 'Post created successfully.' });
-
+    return { success: true, message: 'Post added successfully.' };
 }
+
+async function getAllPosts(email){
+    const db = await connect();
+    const usersCollection = db.collection('users');
+    const user = await usersCollection.findOne({ email });
+
+    if (!user) {
+        return { success: false, message: 'User not found.' };
+      }
+    
+      const posts = user.posts || []; // Access the posts field or default to an empty array
+    
+      return { success: true, posts };
+}
+
+async function deletePost(email, newArray) {
+    try {
+      const db = await connect();
+      const usersCollection = db.collection('users');
+      const user = await usersCollection.findOne({ email });
+  
+      if (!user) {
+        return { success: false, message: 'User not found.' };
+      }
+  
+      await usersCollection.updateOne({ email }, { $set: { posts: newArray } });
+  
+      // Extract the updated posts array from the newArray parameter
+      const updatedPosts = newArray;
+  
+      return { success: true, posts: updatedPosts };
+    } catch (error) {
+      console.error('Error deleting post:', error);
+      return { success: false, message: 'Error deleting post.' };
+    }
+  }
+
 
 function generateJWT(user) {
     return new Promise((resolve, reject) => {
@@ -48,5 +94,5 @@ function verifyJWT(token) {
 }
 
 module.exports = {
-    addPost, generateJWT, verifyJWT
+    addPost, getAllPosts, deletePost, generateJWT, verifyJWT
 };

@@ -1,6 +1,6 @@
 import { ref, reactive } from 'vue';
 import { useRouter } from "vue-router"
-import {toast, showError} from "./session"
+import { toast, showError } from "./session"
 import * as myFetch from "./myFetch";
 import { type User, getUserByEmail } from "./users";
 
@@ -19,34 +19,34 @@ export const session = reactive({
     token: null as string | null,
     redirectUrl: null as string | null,
     messages: [] as {
-      type: string,
-      text: string
+        type: string,
+        text: string
     }[],
     loading: 0
-  })
+})
 
-export function api(action: string, body?: unknown, method?: string, headers?: any){
+export function api(action: string, body?: unknown, method?: string, headers?: any) {
     session.loading++;
-  
-    if(session.token){
-      headers = headers ?? {};
-      headers['Authorization'] = `Bearer ${session.token}`;
+
+    if (session.token) {
+        headers = headers ?? {};
+        headers['Authorization'] = `Bearer ${session.token}`;
     }
     return myFetch.api(`${action}`, body, method, headers)
-      .catch(err=> showError(err))
-      .finally(()=> session.loading--);
-  }
+        .catch(err => showError(err))
+        .finally(() => session.loading--);
+}
 
 export interface Activity {
-    title: string, 
-    date: string, 
-    duration: string, 
-    location: string, 
-    picture: string, 
-    subject: string, 
+    title: string,
+    date: string,
+    duration: string,
+    location: string,
+    picture: string,
+    subject: string,
     distance: number
     userid?: number
-    firstname?: string 
+    firstname?: string
     lastname?: string
     username?: string
 }
@@ -62,14 +62,14 @@ export function addActivity(activity: Activity) {
     distance.value = ''
 }
 
-export function remove(index: number){
+export function remove(index: number) {
     const originalIndex = activities.value.length - 1 - index;
     activities.value.splice(originalIndex, 1);
 };
 
 export function edit(activity: Activity, index: number | null = null) {
     if (index !== null && index >= 0 && index < activities.value.length) {
-      activities.value[index] = activity; // Replace the activity at the specified index
+        activities.value[index] = activity; // Replace the activity at the specified index
     }
     // Clear the form data (if needed)
     title.value = '';
@@ -79,20 +79,76 @@ export function edit(activity: Activity, index: number | null = null) {
     picture.value = '';
     subject.value = '';
     distance.value = 0; // Reset distance as needed
-  }
+}
 
-export function useCreate(){
+export function useCreate() {
     const router = useRouter()
     return {
         async create(email: string, title: string, date: string, duration: string, distance: string, location: string, subject: string) {
-          const response = await api("activities/addpost", {email, title, date, duration, distance, location, subject})
-          if(response.success){
-            toast.success("Profile edited successfully. Please log out and log back in to see changes.")
-          }else{
-            toast.error(response.message)
-          }
-          router.push(session.redirectUrl || "/edit");
-          session.redirectUrl = null
+            const response = await api("activities/addpost", { email, title, date, duration, distance, location, subject })
+            if (response.success) {
+                toast.success("Post added successfully.")
+            } else {
+                toast.error(response.message)
+            }
+            router.push(session.redirectUrl || "/activity");
+            session.redirectUrl = null
+        }
+    }
+}
+
+export function postData() {
+    const router = useRouter()
+    return {
+        async data(email: string) {
+            try {
+                const response = await api("activities/postdata", { email });
+                if (response.success === true) {
+                    // console.log(response.posts)
+                    return response.posts;
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }
+    }
+}
+
+export function useDelete() {
+    const router = useRouter()
+    return {
+        async remove(email: string, newArray: Array<{
+            title: string;
+            date: string;
+            duration: string;
+            distance: string;
+            location: string;
+            subject: string;
+        }>) {
+            try {
+                const response = await api("activities/delete", { email, newArray });
+                if (response.success === true) {
+                    toast.success("Post deleted successfully.")
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }
+    }
+}
+
+export function useEdit() {
+    const router = useRouter()
+    return {
+        async edit(index: number, title: string, date: string, duration: string, distance: string, location: string, subject: string) {
+            try {
+                const response = await api("activities/edit", { index, title, date, duration, distance, location, subject });
+                if (response.success === true) {
+                    toast.success("Post edited successfully.")
+                }
+            } catch (error) {
+                console.error(error);
+            }
         }
     }
 }
