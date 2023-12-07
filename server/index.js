@@ -3,6 +3,7 @@ const express = require('express');
 require('dotenv').config();
 const userController = require('./controllers/users');
 const activityController = require('./controllers/activities');
+const todoController = require('./controllers/todo')
 const { parseAuthorizationToken, requireUser } = require('./middleware/authorization');
 const app = express();
 
@@ -29,6 +30,7 @@ app
 
     .use('/api/v1/users', userController)
     .use('/api/v1/activities', activityController)
+    .use('/api/v1/todo', todoController)
 
     .get('*', (req, res) => {
         res.sendFile(path.join( __dirname, '../client/dist/index.html') )

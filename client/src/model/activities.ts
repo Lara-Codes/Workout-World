@@ -2,7 +2,7 @@ import { ref, reactive } from 'vue';
 import { useRouter } from "vue-router"
 import { toast, showError } from "./session"
 import * as myFetch from "./myFetch";
-import { type User, getUserByEmail } from "./users";
+import { type User } from "./users";
 
 const title = ref('')
 const date = ref('')
@@ -67,19 +67,6 @@ export function remove(index: number) {
     activities.value.splice(originalIndex, 1);
 };
 
-export function edit(activity: Activity, index: number | null = null) {
-    if (index !== null && index >= 0 && index < activities.value.length) {
-        activities.value[index] = activity; // Replace the activity at the specified index
-    }
-    // Clear the form data (if needed)
-    title.value = '';
-    date.value = '';
-    duration.value = '';
-    location.value = '';
-    picture.value = '';
-    subject.value = '';
-    distance.value = 0; // Reset distance as needed
-}
 
 export function useCreate() {
     const router = useRouter()
@@ -104,7 +91,6 @@ export function postData() {
             try {
                 const response = await api("activities/postdata", { email });
                 if (response.success === true) {
-                    // console.log(response.posts)
                     return response.posts;
                 }
             } catch (error) {
@@ -140,9 +126,16 @@ export function useDelete() {
 export function useEdit() {
     const router = useRouter()
     return {
-        async edit(index: number, title: string, date: string, duration: string, distance: string, location: string, subject: string) {
+        async edit(email: string, newArray: Array<{
+            title: string;
+            date: string;
+            duration: string;
+            distance: string;
+            location: string;
+            subject: string;
+        }>) {
             try {
-                const response = await api("activities/edit", { index, title, date, duration, distance, location, subject });
+                const response = await api("activities/delete", { email, newArray });
                 if (response.success === true) {
                     toast.success("Post edited successfully.")
                 }

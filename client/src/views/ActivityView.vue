@@ -87,20 +87,30 @@ const getIndex = (index: number) => {
 }
 
 const editPost = async () => {
-  const reversedIndex = posts.value.length - 1 - i.value;
-  const postToUpdate = posts.value[reversedIndex];
-  if (newtitle.value !== '') postToUpdate.title = newtitle.value;
-  if (newdate.value !== '') postToUpdate.date = newdate.value;
-  if (newduration.value !== '') postToUpdate.duration = newduration.value;
-  if (newlocation.value !== '') postToUpdate.location = newlocation.value;
-  if (newsubject.value !== '') postToUpdate.subject = newsubject.value;
-  if (newdistance.value !== '') postToUpdate.distance = newdistance.value;
+  console.log(posts.value[i.value])
+  console.log(newtitle.value)
+  if(newtitle.value){
+    posts.value[i.value].title = newtitle.value
+  }
+  if(newdate.value){
+    posts.value[i.value].date = newdate.value
+  }
+  if(newduration.value){
+    posts.value[i.value].duration = newduration.value 
+  }
+  if(newlocation.value){
+    posts.value[i.value].location = newlocation.value
+  }
+  if(newsubject.value){
+    posts.value[i.value].subject = newsubject.value
+  }
+  if(newdistance.value){
+    posts.value[i.value].distance = newdistance.value
+  }
 
-  // Update the post in the array
-  posts.value[i.value] = postToUpdate;
-  // if(session.user){
-  //   await remove(session.user.email, posts.value);
-  // }
+  if(session.user){
+    await edit(session.user.email, posts.value);
+  }
 };
 
 
@@ -252,7 +262,7 @@ const editPost = async () => {
                   Delete
                   <button class="delete" @click="removePost(index)"></button>
                   <button class="button is-info is-small edit"
-                    @click="getIndex(index); showEdit = !showEdit;">Edit</button>
+                    @click.prevent="getIndex(index); showEdit=!showEdit;">Edit</button>
                 </div>
               </article>
             </div>

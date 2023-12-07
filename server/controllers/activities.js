@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {addPost, getAllPosts, deletePost} = require('../models/activities');
+const {addPost, getAllPosts, deletePost, getAll} = require('../models/activities');
 router 
     .post('/addpost', async (req, res, next) => {
         try{
@@ -29,8 +29,13 @@ router
         }
     })
 
-    .post('/edit', async(req, res, next) => {
-        const edit = await editPost(req.body.index, )
+    .post('/getall', async(req, res, next) => {
+        try{
+            const getall = await getAll(); 
+            res.json({success: true, posts: getall})
+        }catch(error){
+            next(error)
+        }
     })
 
 

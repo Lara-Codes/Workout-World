@@ -3,14 +3,19 @@
   import { RouterLink } from 'vue-router';
   import LoginBadge from './LoginBadge.vue';
   import { getSession } from '../model/session'
-  import { useAdmin } from '@/model/session'
+  import { useAdmin, useAccess } from '@/model/session'
 
   const {ad} = useAdmin()
+  const {access} = useAccess()
 
   const session = getSession()
 
   const doAdmin = () => {
     ad()
+  }
+
+  const doAccess = async () => {
+    const response = await access()
   }
 
   const mobileMenuOpen = ref(false);
@@ -114,9 +119,9 @@
             </a>
 
             <div class="navbar-dropdown" v-if="session.user">
-              <RouterLink class="navbar-item" to="/users" @click.prevent="doAdmin">
+              <button class="navbar-item" @click="doAccess();">
                 Admin
-              </RouterLink>
+              </button>
             </div>
 
           </div>

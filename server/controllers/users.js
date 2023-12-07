@@ -9,14 +9,6 @@ router
     res.send(getAll());
     })
 
-    .post('/users', requireUser(true), async (req, res, next) => {
-        try {
-            res.status(200).json({ success: true });
-        } catch (error) {
-            next(error);
-        }
-    })
-
     .post('/userdata', requireUser(true), async (req, res, next) => {
         try {
             const allusers = await getAll();
@@ -25,12 +17,6 @@ router
             next(error);
         }
     })
-
-    // .post('/', requireUser(true), (req, res, next) => {
-
-    //     const user = create(req.body);
-    //     res.send(user);
-
     // })
     .post('/signup', async (req, res, next) => {
         try{
@@ -61,10 +47,17 @@ router
         }
     })
 
+    .post('/users', requireUser(true), async (req, res, next) => {
+        try {
+            res.status(200).json({ success: true });
+        } catch (error) {
+            next(error);
+        }
+    })
+
     .post('/editasadmin', requireUser(true), async(req, res, next) => {
         try{
             const update = await updateasadmin(req.body.ogemail, req.body.email, req.body.firstName, req.body.lastName, req.body.role, req.body.password)
-            console.log("Update result:", update);
             res.json({ success: true });
         }catch(error){
             next(error)

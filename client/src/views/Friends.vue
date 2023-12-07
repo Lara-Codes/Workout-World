@@ -1,15 +1,21 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { getSession } from '../model/session'
-import { calculateDistance } from '../model/stats'
-import Friends from './Friends.vue';
-import { type Activity, addActivity, activities, remove } from '../model/activities'
+import { useRetrievePosts } from '../model/friends'
 
-let show = ref(false);
-let close = () => {
-  show.value = !show.value;
-}
 const session = getSession()
+let posts = ref<Array<{ firstName: string, lastName: string, email: string, title: string; date: string; duration: string; distance: string, location: string, subject: string }>>([]);
+  onMounted(async () => {
+  try {
+    if (session.user) {
+      const result = await useRetrievePosts().data();
+      posts.value = result.posts
+    }
+  } catch (error) {
+    console.error(error);
+  }
+});
+
 
 </script>
 
@@ -29,7 +35,7 @@ const session = getSession()
             </div>
 
 
-            <div class="box" v-for="(activity, index) in activities.slice().reverse()" :key="index">
+            <div class="box" v-for="(activity, index) in posts.slice().reverse()" :key="index">
               <article class="media">
                 <figure class="media-left">
                   <p class="image is-64x64">
@@ -39,7 +45,7 @@ const session = getSession()
                 <div class="media-content">
                   <div class="content">
                     <p class="is-size-5">
-                        <strong>{{ activity.firstname }} {{ activity.lastname }}</strong>   <small>{{ activity.username }}</small><br>
+                        <strong>{{ activity.firstName }} {{ activity.lastName }}</strong>   <small>{{ activity.email }}</small><br>
                         
                         <small>0m</small>
                       <br>

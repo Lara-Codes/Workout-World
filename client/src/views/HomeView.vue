@@ -1,24 +1,52 @@
 <script setup lang="ts">
   import { getSession } from '../model/session'
-  import { ref } from 'vue';
+  import { ref, onMounted } from 'vue';
+  import { useCreate, taskData, useRemove } from '../model/todo'
+  const {create} = useCreate()
+  const {remove} = useRemove()
+  const session = getSession()
 
   const newTask = ref('');
-  const tasks = ref([] as {id?: number, text: string, completed: boolean}[]) // question mark makes id optional
+  const tasks = ref([] as {completed: boolean, description: string}[]) // question mark makes id optional
 
   const tabList = ['Current', 'Completed', 'All']
   const tabState = ref('Current');
 
-  function addTask() {
-    tasks.value.push({text: newTask.value, completed: false});
-    newTask.value = '';
-  }
-
-  function shouldDisplay(task: {id?: number, text: string, completed: boolean}){
+  function shouldDisplay(task: {completed: boolean, description: string}){
     return (tabState.value==='Current' && !task.completed) ||
     (tabState.value == 'Completed' && task.completed) ||
     tabState.value == 'All'; 
   }
-  const session = getSession()
+
+  onMounted(async () => {
+  try {
+    if (session.user) {
+      const result = await taskData().data(session.user.email);
+      console.log(result.tasks)
+      tasks.value = result.tasks
+    }
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+  const doCreate = async () => {
+    if(session.user){
+      await create(session.user.email, false, newTask.value)
+    }
+    tasks.value.push({description: newTask.value, completed: false});
+    newTask.value = '';
+  }
+
+  const doRemove = async (index: number) => {
+    if(session.user){
+      await remove(session.user.email, tasks.value[index].description)
+    }
+    tasks.value.splice(index, 1);
+  }
+
+  // const doChangeState = async(index: number)
+
 </script>
 
 <template>
@@ -45,7 +73,7 @@
       
       <div class="panel-block">
         <p class="control has-icons-left">
-          <input class="input" type="text" placeholder="What do you want to do?" @keypress.enter="addTask"
+          <input class="input" type="text" placeholder="What do you want to do?" @keypress.enter="doCreate"
             v-model="newTask">
           <span class="icon is-left">
             <i class="fas fa-plus" aria-hidden="true"></i>
@@ -57,11 +85,9 @@
         <a v-for="tab in tabList" :class="{'is-active': tabState==tab}" @click.prevent="tabState = tab">{{ tab }}</a>
       </p>
 
-      <label class="panel-block" v-for="task in tasks" v-show="shouldDisplay(task)">
-        <!-- v-model is 2 way binding -->
-        <!-- If task.completed = true, checked. else, unchecked. -->
+      <label class="panel-block" v-for="(task, index) in tasks" v-show="shouldDisplay(task)">
         <input type="checkbox" v-model="task.completed"> 
-        {{ task.text }}
+        {{ task.description }}<button class="delete" style="margin-left: auto;" @click.prevent="doRemove(index)"></button>
       </label>
 
       <a class="panel-block is-active">

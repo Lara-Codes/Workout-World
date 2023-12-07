@@ -95,11 +95,11 @@ export function useAdmin(){
   return{
     async ad(){
       const response = await api("users/users", {}) 
-      if(response.success===true){
-        router.push(session.redirectUrl || "/users");
-      } else{
-        toast(response.error)
-      }
+      // if(response.success===true){
+      //   router.push(session.redirectUrl || "/users");
+      // } else{
+      //   toast(response.error)
+      // }
     }
   }
 }
@@ -145,6 +145,20 @@ export function useDelete(){
         toast.success("User deleted successfully. Please log out and log back in to see changes.")
       }else{
         toast.error(response.message)
+      }
+    }
+  }
+}
+
+export function useAccess(){
+  const router = useRouter(); 
+  return {
+    async access(){
+      const response = await api("users/users", {})
+      if (response.success) {
+        router.push('/users');
+      }else{
+        toast.error("You must be an admin to access this page.")
       }
     }
   }
