@@ -3,23 +3,15 @@
   import { RouterLink } from 'vue-router';
   import LoginBadge from './LoginBadge.vue';
   import { getSession } from '../model/session'
-  // import FlyoutPanel from './FlyoutPanel.vue';
-  // import ShoppingCart from './ShoppingCart.vue'
   import { useAdmin } from '@/model/session'
 
   const {ad} = useAdmin()
-
-
-  const isShoppingCartOpen = ref(false);
 
   const session = getSession()
 
   const doAdmin = () => {
     ad()
   }
-
-  let dropdown = false;
-  let isActive = ref(dropdown)
 
   const mobileMenuOpen = ref(false);
 
@@ -36,7 +28,6 @@
   });
 
   const closeMobileMenuOnResize = () => {
-    // Define your screen width threshold (e.g., 768 pixels)
     const screenWidthThreshold = 768;
     if (window.innerWidth >= screenWidthThreshold) {
       mobileMenuOpen.value = false;
@@ -147,22 +138,8 @@
 
       </div>
 
-
-      <!-- <div class="navbar-end">
-      <div class="navbar-item">
-        <a class="button" :class="{'is-active': isShoppingCartOpen }" @click.prevent="isShoppingCartOpen = !isShoppingCartOpen">
-          <span class="icon">
-            <i class="fas fa-shopping-cart"></i>
-          </span>
-        </a>
-      </div>
-    </div> -->
-
     </nav>
   </section>
-  <!-- <FlyoutPanel :class="{'is-active': isShoppingCartOpen }">
-    <ShoppingCart />
-  </FlyoutPanel> -->
 </template>
 
 <style scoped>

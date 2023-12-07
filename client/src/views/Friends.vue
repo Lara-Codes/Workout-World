@@ -39,8 +39,6 @@ const session = getSession()
                 <div class="media-content">
                   <div class="content">
                     <p class="is-size-5">
-                      <!-- <strong>{{ session.user.firstName }} {{ session.user.lastName }}</strong> <small>@{{
-                        session.user.username }}</small>  -->
                         <strong>{{ activity.firstname }} {{ activity.lastname }}</strong>   <small>{{ activity.username }}</small><br>
                         
                         <small>0m</small>

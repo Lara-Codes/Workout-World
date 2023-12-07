@@ -1,6 +1,3 @@
-/* B"H
-*/
-
 const API_ROOT = import.meta.env.VITE_API_ROOT as string;
 
 export function rest(url: string, body?: unknown, method?: string, headers?: HeadersInit){
@@ -21,12 +18,3 @@ export function rest(url: string, body?: unknown, method?: string, headers?: Hea
 export function api(action: string, body?: unknown, method?: string, headers?: HeadersInit){
     return rest(`${API_ROOT}/${action}`, body, method, headers);
 }
-
-
-
-/*  Asynchronous patterns in JavaScript
-    1. Callbacks
-    2. Pipelining
-    3. Promises
-    4. Async/Await
-*/

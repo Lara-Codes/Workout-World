@@ -1,7 +1,3 @@
-// @ts-check
-/* B"H
-*/
-
 const express = require('express');
 const { getAll, remove, login, register, edit, updateasadmin } = require('../models/users');
 const { requireUser } = require('../middleware/authorization');
@@ -12,17 +8,6 @@ router
     .get('/', requireUser(true), (req, res, next) => {
     res.send(getAll());
     })
-
-    // .get('/search', requireUser() , (req, res, next) => {
-
-    //     const results = search(req.query.q);
-    //     res.send(results);
-    // })
-
-    // .get('/:id', requireUser(), (req, res, next) => {
-    //     const user = get(+req.params.id);
-    //     res.send( user );
-    // })
 
     .post('/users', requireUser(true), async (req, res, next) => {
         try {
@@ -94,24 +79,5 @@ router
             next(error)
         }
     })
-
-// .patch('/:id', requireUser(), (req, res, next) => {
-    
-//     if(req.user.id !== +req.params.id && !req.user.admin) {
-//         return next({
-//             status: 403,
-//             message: 'You can only edit your own account. (Unless you are an admin)'
-//         });
-//     }
-//     req.body.id = +req.params.id;
-//     const user = edit(req.body);
-//     res.send(user);
-  
-// })
-// .delete('/:id', requireUser(true), (req, res, next) => {
-    
-//     remove(+req.params.id);
-//     res.send({message: 'User removed'});
-// });
 
 module.exports = router;

@@ -1,74 +1,3 @@
-
-// /**
-//  * @typedef {Object} Bank
-//  * @property {string} cardExpire
-//  * @property {string} cardNumber
-//  * @property {string} cardType
-//  * @property {string} currency
-//  * @property {string} iban
-//  */
-
-// /**
-//  * @typedef {Object} Coordinates
-//  * @property {number} lat
-//  * @property {number} lng
-//  */
-
-// /**
-//  * @typedef {Object} Address
-//  * @property {string} address
-//  * @property {string} [city]
-//  * @property {Coordinates} coordinates
-//  * @property {string} postalCode
-//  * @property {string} state
-//  */
-
-// /**
-//  * @typedef {Object} Company
-//  * @property {Address} address
-//  * @property {string} department
-//  * @property {string} name
-//  * @property {string} title
-//  */
-
-// /**
-//  * @typedef {Object} BaseUser
-//  * @property {string} firstName
-//  * @property {string} lastName
-//  * @property {string} maidenName
-//  * @property {number} age
-//  * @property {string} gender
-//  * @property {string} email
-//  * @property {string} phone
-//  * @property {string} username
-//  * @property {string} password
-//  * @property {string} birthDate
-//  * @property {string} image
-//  * @property {string} bloodGroup
-//  * @property {number} height
-//  * @property {string} macAddress
-//  * @property {string} university
-//  * @property {Bank} bank
-//  * @property {Company} company
-//  * @property {string} ein
-//  * @property {string} ssn
-//  * @property {string} userAgent
-//  * @property {string} role
-//  */
-
-// /**
-//  * @typedef {Object} HasId
-//  * @property {number} id
-//  */
-
-// /**
-//  * @typedef {BaseUser & HasId} User
-//  */
-
-// /**
-//  * @type { {users: User[]} }
-//  */
-const data = require("../data/users.json");
 const jwt = require('jsonwebtoken');
 const { connect, ObjectId } = require('./mongo');
 
@@ -76,9 +5,6 @@ const { connect, ObjectId } = require('./mongo');
 const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN;
 
-// /**
-//  * @returns {User[]} An array of products.
-//  */
 async function getAll() {
     const db = await connect();
     const usersCollection = db.collection('users');
@@ -86,32 +12,16 @@ async function getAll() {
     return users;
 }
 
-// /**
-//  * @param {number} id - The product's ID.
-//  */
-// function get(id) {
-//   const item = data.users.find(x => x.id === id);
-//   if (!item) {
-//     throw new Error('User');
-//   }
-//   return item
-// }
-
-// /**
-//  * @param {BaseUser} values - The user to create.
-//  * @returns {User} The created user.
-//  */
 async function register(email, password, firstName, lastName) {
   const trimmedEmail = email.trim(); // get rid of empty spaces and weird characters 
   const trimmedPassword = password.trim();
   const trimmedFirstName = firstName.trim();
   const trimmedLastName = lastName.trim();
 
-  // Check if any of the trimmed values are empty
   if (!trimmedEmail || !trimmedPassword || !trimmedFirstName || !trimmedLastName) {
     throw new Error('Please fill out all fields.');
   }
-  // const item = data.users.find(x => x.email === email);
+
   const db = await connect();
   const usersCollection = db.collection('users');
   const user = await usersCollection.findOne({ trimmedEmail });
@@ -127,7 +37,6 @@ async function register(email, password, firstName, lastName) {
     firstName: trimmedFirstName,
     lastName: trimmedLastName,
     role: 'user'
-    // Add other properties as needed
   };
 
   const result = await usersCollection.insertOne(newUser);
@@ -139,11 +48,6 @@ async function register(email, password, firstName, lastName) {
   }
 }
 
-// /**
-//  * @param {string} email
-//  * @param {string} password
-//  * @returns { Promise< { user: User, token: string}> } The created user.
-//  */
 async function login(email, password) {
   if (!email || !password) {
     throw new Error('Please fill out all fields.');
@@ -270,7 +174,6 @@ function verifyJWT(token) {
     });
   })
 }
-
 
 module.exports = {
   getAll, remove, login, register, edit, updateasadmin, generateJWT, verifyJWT

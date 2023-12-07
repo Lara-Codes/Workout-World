@@ -1,4 +1,3 @@
-const data = require("../data/users.json");
 const jwt = require('jsonwebtoken');
 const { connect, ObjectId } = require('./mongo');
 

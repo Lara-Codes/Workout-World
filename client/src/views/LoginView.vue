@@ -1,8 +1,6 @@
 <script setup lang="ts">
-    import { getSession, useLogin } from '@/model/session'
-
+    import { useLogin } from '@/model/session'
     import { ref } from 'vue';
-    const session = getSession()
     const { login } = useLogin()
 
     const email = ref('')

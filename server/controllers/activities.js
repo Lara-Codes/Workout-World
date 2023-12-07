@@ -1,5 +1,4 @@
 const express = require('express');
-const { requireUser } = require('../middleware/authorization');
 const router = express.Router();
 const {addPost, getAllPosts, deletePost} = require('../models/activities');
 router 
