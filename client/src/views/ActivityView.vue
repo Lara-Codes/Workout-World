@@ -2,9 +2,9 @@
 import { ref, computed } from 'vue';
 import { getSession } from '../model/session'
 import { calculateDistance } from '../model/stats'
-import Friends from './Friends.vue';
-import { type Activity, addActivity, activities, remove, edit } from '../model/activities'
 
+import { type Activity, addActivity, activities, remove, edit, useCreate } from '../model/activities'
+const {create} = useCreate()
 let show = ref(false);
 let editing = ref(false)
 let post = ref(-1)
@@ -14,79 +14,89 @@ let close = () => {
 }
 
 const session = getSession()
-let userid = 0;
-if (session.user) {
-  userid = session.user.id;
-}
 
-const formData = ref({
-  title: '',
-  date: '',
-  duration: '',
-  location: '',
-  picture: '',
-  subject: '',
-  distance: 0,
-  userid: session.user?.id || '',
-  firstname: session.user?.firstName || '',
-  lastname: session.user?.lastName || '',
-  username: session.user?.username || ''
-});
+// let userid = 0;
+// if (session.user) {
+//   userid = session.user.id;
+// }
 
-function addNewActivity() {
-  if(editing.value===false){
-    const newActivity = {
-    title: formData.value.title,
-    date: formData.value.date,
-    duration: formData.value.duration,
-    location: formData.value.location,
-    picture: formData.value.picture,
-    subject: formData.value.subject,
-    distance: formData.value.distance,
-    userid: session.user?.id || 0,
-    firstname: session.user?.firstName || '',
-    lastname: session.user?.lastName || '',
-    username: session.user?.username || ''
-  };
-    addActivity(newActivity)
-  } else{
-      const newActivity = {
-      title: formData.value.title,
-      date: formData.value.date,
-      duration: formData.value.duration,
-      location: formData.value.location,
-      picture: formData.value.picture,
-      subject: formData.value.subject,
-      distance: formData.value.distance,
-      userid: session.user?.id || 0,
-      firstname: session.user?.firstName || '',
-      lastname: session.user?.lastName || '',
-      username: session.user?.username || ''
-    };
-    edit(newActivity, post.value)
-    editing.value = false; 
-    post.value = -1; 
+const title = ref('')
+const date = ref('')
+const duration = ref('')
+const location = ref('')
+const subject = ref('')
+const distance = ref('')
+
+const doPost = () => {
+  if(session.user){
+    create(session.user.email, title.value, date.value, duration.value, location.value, subject.value, distance.value)
   }
 }
 
+// const formData = ref({
+//   title: '',
+//   date: '',
+//   duration: '',
+//   location: '',
+//   subject: '',
+//   distance: 0,
+  // userid: session.user?.id || '',
+  // firstname: session.user?.firstName || '',
+  // lastname: session.user?.lastName || '',
+  // username: session.user?.username || ''
+// });
 
-function resetValues() {
-  formData.value.title = '';
-  formData.value.date = '';
-  formData.value.duration = '';
-  formData.value.location = '';
-  formData.value.picture = '';
-  formData.value.subject = '';
-  formData.value.distance = 0; // Reset distance as needed
-}
+// function addNewActivity() {
+//   if(editing.value===false){
+//     const newActivity = {
+//     title: formData.value.title,
+//     date: formData.value.date,
+//     duration: formData.value.duration,
+//     location: formData.value.location,
+//     subject: formData.value.subject,
+//     distance: formData.value.distance,
+//     userid: session.user?.id || 0,
+//     firstname: session.user?.firstName || '',
+//     lastname: session.user?.lastName || '',
+//     username: session.user?.username || ''
+//   };
+//     addActivity(newActivity)
+//   } else{
+//       const newActivity = {
+//       title: formData.value.title,
+//       date: formData.value.date,
+//       duration: formData.value.duration,
+//       location: formData.value.location,
+//       subject: formData.value.subject,
+//       distance: formData.value.distance,
+//       userid: session.user?.id || 0,
+//       firstname: session.user?.firstName || '',
+//       lastname: session.user?.lastName || '',
+//       username: session.user?.username || ''
+//     };
+//     edit(newActivity, post.value)
+//     editing.value = false; 
+//     post.value = -1; 
+//   }
+// }
 
-const doCalculation = () => {
-  calculateDistance(formData.value.distance);
-}
 
-const myActivities = computed(() =>
-  activities.value.filter((activity) => activity.userid === userid)
-);
+// function resetValues() {
+//   formData.value.title = '';
+//   formData.value.date = '';
+//   formData.value.duration = '';
+//   formData.value.location = '';
+//   formData.value.subject = '';
+//   formData.value.distance = 0; // Reset distance as needed
+// }
+
+// const doCalculation = () => {
+//   calculateDistance(formData.value.distance);
+// }
+
+// const myActivities = computed(() =>
+//   activities.value.filter((activity) => activity.userid === userid)
+// );
 
 </script>
 
@@ -115,40 +125,33 @@ const myActivities = computed(() =>
                 <div class="field is-flex is-flex-direction-column has-text-left">
                   <label class="label">Title</label>
                   <div class="control">
-                    <input class="input" type="text" placeholder="" v-model="formData.title">
+                    <input class="input" type="text" placeholder="" v-model="title">
                   </div>
                 </div>
 
                 <div class="field is-flex is-flex-direction-column has-text-left">
                   <label class="label" for="datePicker">Date:</label>
-                  <input class="input" type="date" id="datePicker" name="date" v-model="formData.date">
+                  <input class="input" type="date" id="datePicker" name="date" v-model="date">
                 </div>
 
                 <div class="field is-flex is-flex-direction-column has-text-left">
                   <label class="label">Duration</label>
                   <div class="control">
-                    <input class="input" type="text" placeholder="" v-model="formData.duration">
+                    <input class="input" type="text" placeholder="" v-model="duration">
                   </div>
                 </div>
 
                 <div class="field is-flex is-flex-direction-column has-text-left">
                   <label class="label">Distance</label>
                   <div class="control">
-                    <input class="input" type="number" placeholder="Distance in feet" v-model="formData.distance">
+                    <input class="input" type="number" placeholder="Distance in feet" v-model="distance">
                   </div>
                 </div>
 
                 <div class="field is-flex is-flex-direction-column has-text-left">
                   <label class="label">Location</label>
                   <div class="control">
-                    <input class="input" type="text" placeholder="" v-model="formData.location">
-                  </div>
-                </div>
-
-                <div class="field is-flex is-flex-direction-column has-text-left">
-                  <label class="label">Picture</label>
-                  <div class="control">
-                    <input class="input" type="text" placeholder="" v-model="formData.picture">
+                    <input class="input" type="text" placeholder="" v-model="location">
                   </div>
                 </div>
 
@@ -156,7 +159,7 @@ const myActivities = computed(() =>
                   <label class="label">Subject</label>
                   <div class="control">
                     <div class="select">
-                      <select v-model="formData.subject">
+                      <select v-model="subject">
                         <option>Select dropdown</option>
                         <option>Run</option>
                         <option>Bike</option>
@@ -170,7 +173,7 @@ const myActivities = computed(() =>
               </div>
               <footer class="modal-card-foot">
                 <button class="button is-success"
-                  @click.prevent="doCalculation(); addNewActivity(); show = !show; resetValues();">Save
+                  @click.prevent="doPost">Save
                   changes</button>
                 <button class="button" @click="show = !show; editing=false">Cancel</button>
               </footer>
@@ -186,7 +189,7 @@ const myActivities = computed(() =>
               </button>
             </div>
 
-            <div class="box" v-for="(activity, index) in myActivities.slice().reverse()" :key="index">
+            <!-- <div class="box" v-for="(activity, index) in myActivities.slice().reverse()" :key="index">
               <article class="media">
                 <figure class="media-left">
                   <p class="image is-64x64">
@@ -196,8 +199,6 @@ const myActivities = computed(() =>
                 <div class="media-content">
                   <div class="content">
                     <p class="is-size-5">
-                      <!-- <strong>{{ session.user.firstName }} {{ session.user.lastName }}</strong> <small>@{{
-                        session.user.username }}</small>  -->
                       <strong>{{ activity.firstname }} {{ activity.lastname }}</strong> <small>{{ activity.username
                       }}</small><br>
 
@@ -238,17 +239,12 @@ const myActivities = computed(() =>
                   <button class="button is-info is-small edit" @click="show=!show; editing = true; post=index">Edit</button>
                 </div>
               </article>
-            </div>
+            </div> -->
 
 
           </div>
         </div>
       </div>
-
-      <div v-else>
-        Please log in to see your activity.
-      </div>
-
     </h2>
   </main>
 </template>

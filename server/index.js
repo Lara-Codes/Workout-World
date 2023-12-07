@@ -5,6 +5,7 @@ const express = require('express');
 require('dotenv').config();
 const productController = require('./controllers/products');
 const userController = require('./controllers/users');
+const activityController = require('./controllers/activities');
 const { parseAuthorizationToken, requireUser } = require('./middleware/authorization');
 const app = express();
 
@@ -31,6 +32,7 @@ app
 
     .use('/api/v1/products', requireUser(), productController)
     .use('/api/v1/users', userController)
+    .use('/api/v1/activities', activityController)
 
     .get('*', (req, res) => {
         res.sendFile(path.join( __dirname, '../client/dist/index.html') )

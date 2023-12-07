@@ -15,19 +15,19 @@
     Welcome, {{ session.user.firstName }} {{ session.user.lastName }} <br>
     <small>
       Edit User Data 
-      <a class="button is-small is-light is-warning" @click.prevent="">
+      <router-link to="/edit" class="button is-small is-light is-warning">
         <span class="icon">
           <i class="fas fa-edit"></i>
         </span>
-      </a>
+        </router-link>
     </small>
     <small>
       {{ session.user.email }}
-      <a class="button is-small is-light is-warning" @click.prevent="doLogout">
+      <router-link to="/home" class="button is-small is-light is-warning" href="#" @click.prevent="doLogout">
         <span class="icon">
           <i class="fas fa-sign-out-alt"></i>
         </span>
-      </a>
+        </router-link>
     </small>
   </div>
   

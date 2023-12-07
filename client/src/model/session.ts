@@ -6,9 +6,9 @@ import { useToast } from "vue-toastification";
 import * as myFetch from "./myFetch";
 import { type User, getUserByEmail } from "./users";
 
-const toast = useToast();
+export const toast = useToast();
 
-const session = reactive({
+export const session = reactive({
   user: null as User | null,
   token: null as string | null,
   redirectUrl: null as string | null,
@@ -51,6 +51,7 @@ export function useLogin(){
       session.token = response.token;
 
       router.push(session.redirectUrl || "/home");
+      session.redirectUrl = null
       return session.user;
     },
     logout(){
@@ -63,11 +64,88 @@ export function useLogin(){
 export function useSignup(){
   const router = useRouter()
   return {
-    async signup(email: string, password: string, firstName: string, lastName: string) {
+    async signup(email: string, password: string, firstName: string, lastName: string, role?:string) {
       const response = await api("users/signup", {email, password, firstName, lastName})
       toast.success("Registration successful.")
       router.push(session.redirectUrl || "/");
+      session.redirectUrl = null
     }
   }
 
+}
+
+export function useEdit(){
+  const router = useRouter()
+  return {
+    async edit(ogemail: string | undefined, email: string, password: string, firstName: string, lastName: string) {
+      const response = await api("users/edit", {ogemail, email, password, firstName, lastName})
+      if(response.success){
+        toast.success("Profile edited successfully. Please log out and log back in to see changes.")
+      }else{
+        toast.error(response.message)
+      }
+      router.push(session.redirectUrl || "/edit");
+      session.redirectUrl = null
+    }
+  }
+}
+
+export function useAdmin(){
+  const router = useRouter()
+  return{
+    async ad(){
+      const response = await api("users/users", {}) 
+      if(response.success===true){
+        router.push(session.redirectUrl || "/users");
+      } else{
+        toast(response.error)
+      }
+    }
+  }
+}
+
+export function userdata(){
+  const router = useRouter()
+  return{
+    async data(){
+      try {
+        const response = await api("users/userdata", {});
+        if (response.success === true) {
+          return response.users;
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }
+}
+
+export function useEditAsAdmin(){
+  const router = useRouter()
+  return {
+    async edit(ogemail: string, email: string, firstName: string, lastName: string, role: string, password: string) {
+      const response = await api("users/editasadmin", {ogemail, email, firstName, lastName, role, password})
+      if(response.success){
+        toast.success("Profile edited successfully. Please log out and log back in to see changes.")
+      }else{
+        toast.error(response.message)
+      }
+      router.push(session.redirectUrl || "/users");
+      session.redirectUrl = null
+    }
+  }
+}
+
+export function useDelete(){
+  const router = useRouter()
+  return {
+    async remove(email: string){
+      const response = await api("users/delete", {email})
+      if(response.success){
+        toast.success("User deleted successfully. Please log out and log back in to see changes.")
+      }else{
+        toast.error(response.message)
+      }
+    }
+  }
 }

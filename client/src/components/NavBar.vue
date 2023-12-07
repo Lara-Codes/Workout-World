@@ -3,12 +3,20 @@
   import { RouterLink } from 'vue-router';
   import LoginBadge from './LoginBadge.vue';
   import { getSession } from '../model/session'
-  import FlyoutPanel from './FlyoutPanel.vue';
-  import ShoppingCart from './ShoppingCart.vue'
+  // import FlyoutPanel from './FlyoutPanel.vue';
+  // import ShoppingCart from './ShoppingCart.vue'
+  import { useAdmin } from '@/model/session'
+
+  const {ad} = useAdmin()
+
 
   const isShoppingCartOpen = ref(false);
 
   const session = getSession()
+
+  const doAdmin = () => {
+    ad()
+  }
 
   let dropdown = false;
   let isActive = ref(dropdown)
@@ -45,6 +53,7 @@
       <nav class="navbar" :class="{ 'is-active': mobileMenuOpen }" role="navigation" aria-label="dropdown navigation">
         <div class="navbar-item has-dropdown is-active">
           <div class="navbar-dropdown">
+            <a class="navbar-item"><LoginBadge/></a>
             <a class="navbar-item">
               <RouterLink to="/activity">My Activity</RouterLink>
             </a>
@@ -113,23 +122,9 @@
               Users
             </a>
 
-            <!-- If there is a user: -->
             <div class="navbar-dropdown" v-if="session.user">
-              <div v-if="session.user.role === 'admin'">
-                <RouterLink class="navbar-item" to="/users">
-                  Users
-                </RouterLink>
-              </div>
-              <div v-else>
-                <RouterLink class="navbar-item" to="/">
-                  Admin
-                </RouterLink>
-              </div>
-            </div>
-
-            <div class="navbar-dropdown" v-else>
-              <RouterLink class="navbar-item" to="/">
-                Users
+              <RouterLink class="navbar-item" to="/users" @click.prevent="doAdmin">
+                Admin
               </RouterLink>
             </div>
 

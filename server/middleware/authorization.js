@@ -2,6 +2,7 @@
 */
 
 const usersModel = require('../models/users');
+const activitiesModel = require('../models/activities')
 
 module.exports = {
   async parseAuthorizationToken(req, res, next) {
@@ -22,7 +23,7 @@ module.exports = {
           message: 'You must be logged in to perform this action.'
         });
       }
-      if (adminOnly && !req.user.admin) {
+      if (adminOnly && req.user.role !== 'admin') {
         return next({
           status: 403,
           message: 'You must be an admin to perform this action.'
