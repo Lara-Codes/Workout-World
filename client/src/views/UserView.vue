@@ -78,8 +78,16 @@ const doEdit = () => {
     edit(ogemail.value, newemail.value, newfname.value, newlname.value, newrole.value, newpass.value)
 }
 
-const deleteUser = (email: string) => {
-    remove(email)
+const deleteUser = async (email: string) => {
+    await remove(email)
+    const index = userData.value.findIndex((user) => user.email === email);
+
+    // If the user is found, remove it from the userData array
+    if (index !== -1) {
+        userData.value.splice(index, 1);
+    } else {
+        console.error('User not found in userData array');
+    }
 }
 
 </script>

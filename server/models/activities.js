@@ -5,7 +5,6 @@ const { connect, ObjectId } = require('./mongo');
 const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN;
 
-
 async function addPost(email, title, date, duration, distance, location, subject) {
     const db = await connect();
     const usersCollection = db.collection('users');

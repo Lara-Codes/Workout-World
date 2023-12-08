@@ -1,11 +1,13 @@
 <script setup lang="ts">
   import { getSession } from '../model/session'
   import { ref, onMounted } from 'vue';
-  import { useCreate, taskData, useRemove } from '../model/todo'
+  import { type Task, useCreate, taskData, useRemove, useEditState, useEditDescription} from '../model/todo'
   const {create} = useCreate()
   const {remove} = useRemove()
+  const {editState} = useEditState()
+  const {editDescription} = useEditDescription()
   const session = getSession()
-
+  let show = ref(false);
   const newTask = ref('');
   const tasks = ref([] as {completed: boolean, description: string}[]) // question mark makes id optional
 
@@ -45,7 +47,28 @@
     tasks.value.splice(index, 1);
   }
 
-  // const doChangeState = async(index: number)
+  const doChangeState = async(index: number, task: Task) => {
+    if(!task.completed){
+      tasks.value[index].completed = false 
+    }else{
+      tasks.value[index].completed = true 
+    }
+    if(session.user){
+      await editState(session.user.email, tasks.value[index])
+    }
+  }
+
+  const description = ref('')
+  const currIndex = ref<number>(0);
+
+  const newDescription = ref('')
+  const doEditDescription = async() => {
+    tasks.value[currIndex.value].description = newDescription.value
+    if(session.user){
+      await editDescription(session.user.email, description.value, newDescription.value)
+    }
+    newDescription.value=''
+  } 
 
 </script>
 
@@ -86,8 +109,12 @@
       </p>
 
       <label class="panel-block" v-for="(task, index) in tasks" v-show="shouldDisplay(task)">
-        <input type="checkbox" v-model="task.completed"> 
-        {{ task.description }}<button class="delete" style="margin-left: auto;" @click.prevent="doRemove(index)"></button>
+        <input type="checkbox" v-model="task.completed" @change="doChangeState(index, task)"> 
+        {{ task.description }}
+        <div class="task-container">
+        <button class="edit" style="margin-left: auto;" @click.prevent="description = task.description; currIndex = index; show=!show">Edit</button>
+        <button class="delete" style="margin-left: auto;" @click.prevent="doRemove(index)"></button>
+        </div>
       </label>
 
       <a class="panel-block is-active">
@@ -98,6 +125,35 @@
       </a>
     </div>
   </div>
+
+    <div v-if="show">
+          <div class="modal is-active">
+            <div class="modal-background"></div>
+            <div class="modal-card">
+
+              <header class="modal-card-head">
+                <p class="modal-card-title">Edit description</p>
+                <button class="delete" @click="show = !show"></button>
+              </header>
+
+              <div class="modal-card-body">
+
+                <div class="field is-flex is-flex-direction-column has-text-left">
+                  <label class="label">Description</label>
+                  <div class="control">
+                    <input class="input" type="text" :placeholder=description v-model="newDescription">
+                  </div>
+                </div>
+              <footer class="modal-card-foot">
+                <button class="button is-success" @click.prevent="doEditDescription(); show=!show">Save
+                  changes</button>
+                <button class="button" @click="show = !show; description=''">Cancel</button>
+              </footer>
+            </div>
+          </div>
+        </div>
+      </div>
+
   </main>
 </template>
 
@@ -105,5 +161,12 @@
 .todocolor{
   background-color: #00b1d2;
   color: white; 
+}
+
+.task-container {
+  display: flex;
+  margin-left: auto;
+  justify-content: space-between;
+  align-items: center;
 }
 </style>

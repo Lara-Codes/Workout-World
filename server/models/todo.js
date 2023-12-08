@@ -3,7 +3,6 @@ const { connect, ObjectId } = require('./mongo');
 const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN;
 
-
 function generateJWT(user) {
     return new Promise((resolve, reject) => {
         jwt.sign(user, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN }, (err, token) => {
@@ -93,6 +92,44 @@ async function removeTask(email, description) {
     }
 }
 
+async function editstate(email, description, completed){
+    const db = await connect(); // Assuming you have a function to connect to the database
+    const usersCollection = db.collection('users');
+    const user = await usersCollection.findOne({ email });
+
+    if (!user) {
+        throw new Error('User not found');
+    }
+
+    const result = await usersCollection.updateOne(
+        { email, 'tasks.description': description }, // Find the user by email and the task by description
+        { $set: { 'tasks.$.completed': completed } } // Update the completed field of the matched task
+    );
+
+    if (result.matchedCount === 0) {
+        throw new Error('Task not found for the specified user and description');
+    }
+
+    console.log('Task state updated successfully');
+    console.log('Task removed successfully');
+}
+
+async function editdescription(email, olddescription, newdescription) {
+    const db = await connect();
+    const usersCollection = db.collection('users');
+
+    const result = await usersCollection.updateOne(
+        { email, 'tasks.description': olddescription },
+        { $set: { 'tasks.$.description': newdescription } }
+    );
+
+    if (result.matchedCount === 0) {
+        throw new Error('Task not found for the specified user and description');
+    }
+
+    console.log('Task description updated successfully');
+}
+
 module.exports = {
-    addTask, getAllTasks, removeTask, generateJWT, verifyJWT
+    addTask, getAllTasks, removeTask, editstate, editdescription, generateJWT, verifyJWT
 };

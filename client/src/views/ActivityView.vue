@@ -81,9 +81,21 @@ const newsubject = ref('')
 const newdistance = ref('')
 
 const i = ref(0)
+const currTitle = ref('')
+const currDate = ref('')
+const currDuration = ref('')
+const currLocation = ref('')
+const currSubject = ref('')
+const currDistance = ref('')
 const getIndex = (index: number) => {
   const reversedIndex = posts.value.length - 1 - index;
   i.value = reversedIndex
+  currTitle.value = posts.value[i.value].title
+  currDate.value = posts.value[i.value].date
+  currDuration.value = posts.value[i.value].duration
+  currLocation.value = posts.value[i.value].location
+  currSubject.value = posts.value[i.value].subject
+  currDistance.value = posts.value[i.value].distance
 }
 
 const editPost = async () => {
@@ -111,6 +123,13 @@ const editPost = async () => {
   if(session.user){
     await edit(session.user.email, posts.value);
   }
+
+  newtitle.value = ''
+  newdate.value = ''
+  newduration.value = ''
+  newlocation.value = ''
+  newsubject.value = ''
+  newdistance.value = ''
 };
 
 
@@ -282,33 +301,33 @@ const editPost = async () => {
                     <div class="field is-flex is-flex-direction-column has-text-left">
                       <label class="label">Title</label>
                       <div class="control">
-                        <input class="input" type="text" placeholder="title" v-model="newtitle">
+                        <input class="input" type="text" :placeholder=currTitle v-model="newtitle">
                       </div>
                     </div>
 
                     <div class="field is-flex is-flex-direction-column has-text-left">
                       <label class="label" for="datePicker">Date:</label>
-                      <input class="input" type="date" id="datePicker" name="date" v-model="newdate">
+                      <input class="input" type="date" id="datePicker" name="date" :placeholder=currDate v-model="newdate">
                     </div>
 
                     <div class="field is-flex is-flex-direction-column has-text-left">
                       <label class="label">Duration</label>
                       <div class="control">
-                        <input class="input" type="text" placeholder="" v-model="newduration">
+                        <input class="input" type="text" :placeholder=currDuration v-model="newduration">
                       </div>
                     </div>
 
                     <div class="field is-flex is-flex-direction-column has-text-left">
                       <label class="label">Distance</label>
                       <div class="control">
-                        <input class="input" type="number" placeholder="Distance in feet" v-model="newdistance">
+                        <input class="input" type="number" :placeholder=currDistance v-model="newdistance">
                       </div>
                     </div>
 
                     <div class="field is-flex is-flex-direction-column has-text-left">
                       <label class="label">Location</label>
                       <div class="control">
-                        <input class="input" type="text" placeholder="" v-model="newlocation">
+                        <input class="input" type="text" :placeholder=currLocation v-model="newlocation">
                       </div>
                     </div>
 
@@ -316,7 +335,7 @@ const editPost = async () => {
                       <label class="label">Subject</label>
                       <div class="control">
                         <div class="select">
-                          <select v-model="newsubject">
+                          <select :placeholder=currSubject v-model="newsubject">
                             <option>Select dropdown</option>
                             <option>Run</option>
                             <option>Bike</option>

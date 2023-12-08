@@ -4,6 +4,11 @@ import { toast, showError } from "./session"
 import * as myFetch from "./myFetch";
 import { type User } from "./users";
 
+export interface Task {
+    completed: boolean;
+    description: string;
+}
+
 export const session = reactive({
     user: null as User | null,
     token: null as string | null,
@@ -59,16 +64,50 @@ export function taskData() {
     }
 }
 
-export function useRemove(){
-    const router = useRouter(); 
+export function useRemove() {
+    const router = useRouter();
     return {
-        async remove(email: string, description: string){
-            try{
-                const response = await api("todo/removetask", {email, description}); 
+        async remove(email: string, description: string) {
+            try {
+                const response = await api("todo/removetask", { email, description });
                 if (response.success === true) {
                     toast.success("Task deleted successfully. ")
                 }
-            }catch(error){
+            } catch (error) {
+                console.error(error)
+            }
+        }
+    }
+}
+
+export function useEditState() {
+    const router = useRouter();
+    return {
+        async editState(email: string, task: Task) {
+            try {
+                const description = task.description
+                const completed = task.completed
+                const response = await api("todo/edittaskstate", { email, description, completed })
+                if (response.success === true) {
+                    console.log("success")
+                }
+            } catch (error) {
+                console.error(error)
+            }
+        }
+    }
+}
+
+export function useEditDescription() {
+    const router = useRouter();
+    return {
+        async editDescription(email: string, olddescription: string, newdescription: string) {
+            try {
+                const response = await api("todo/edittaskdescription", { email, olddescription, newdescription })
+                if (response.success === true) {
+                    console.log("success")
+                }
+            } catch (error) {
                 console.error(error)
             }
         }
