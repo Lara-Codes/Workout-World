@@ -71,14 +71,14 @@ const doSignup = () => {
 const newemail = ref('')
 const newfname = ref('')
 const newlname = ref('')
-const newrole = ref('user')
+const newrole = ref('admin')
 const newpass = ref('')
 
 const resetFields = () => {
     newemail.value = '';
     newfname.value = '';
     newlname.value = '';
-    newrole.value = 'user'; // Set a default value for the role, change as needed
+    newrole.value = 'admin'; // Set a default value for the role, change as needed
     newpass.value = '';
 };
 

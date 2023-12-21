@@ -2,10 +2,13 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { getSession } from '../model/session'
-import { useGetUsers } from '@/model/users';
+import { useGetUsers, useFilterUsers } from '@/model/users';
 import { useRetrievePosts } from '../model/friends'
+import Oruga from '@oruga-ui/oruga-next';
 
-let userSelected=ref(false)
+const {filterData} = useFilterUsers(); 
+
+let userSelected = ref(false)
 let selectedUserEmail = ref('');
 
 const session = getSession()
@@ -34,10 +37,32 @@ function setSelectedUser(email: string) {
 }
 
 let filteredPosts = ref<Array<{ firstName: string, lastName: string, email: string, title: string; date: string; duration: string; distance: string, location: string, subject: string }>>([]);
-async function getuserprofile(){
+async function getuserprofile() {
   filteredPosts.value = posts.value.filter((post) => post.email === selectedUserEmail.value);
-  selectedUserEmail.value=''
+  selectedUserEmail.value = ''
 }
+
+// TEST SEARCH 
+import { computed } from "vue";
+import { OField, OAutocomplete } from '@oruga-ui/oruga-next'; // Import necessary Oruga components
+
+
+const name = ref("");
+const selected = ref();
+
+const filteredData = ref([]);
+let namesArray: string[] = []
+
+const doFilter = async () => {
+  filteredData.value = await filterData(name.value);
+  namesArray = filteredData.value.map(({ firstName, lastName }) => `${firstName} ${lastName}`);
+  console.log(namesArray)
+}
+
+// const filteredDataArray = computed(() =>
+//     data.value
+// );
+
 
 </script>
 
@@ -48,18 +73,33 @@ async function getuserprofile(){
       <h2 class="subtitle">
         <div v-if="session.user" class="level-item has-text-centered mt-6">
 
-          <div v-if="!userSelected">
+          <!-- <div v-if="!userSelected">
             <div v-for="friend in friends" :key="friend.email" class="card mb-5">
               <header class="card-header">
-              <button class="card-header-title button-style" @click.prevent="setSelectedUser(friend.email); getuserprofile(); userSelected=!userSelected">
-                {{ friend.firstName }} {{ friend.lastName }}
-              </button>
-            </header>
+                <button class="card-header-title button-style"
+                  @click.prevent="setSelectedUser(friend.email); getuserprofile(); userSelected = !userSelected">
+                  {{ friend.firstName }} {{ friend.lastName }}
+                </button>
+              </header>
             </div>
-          </div>
+          </div> -->
+
+          <!-- TEST SEARCH -->
+          <div v-if="!userSelected">
+          <section>
+            <o-field label="Search For a User">
+              <o-autocomplete v-model="name" rounded expanded placeholder="e.g. Rabbi Plotkin" icon="search" clearable
+                open-on-focus :data="namesArray" @select="(option) => (selected = option)" @input="doFilter">
+                <template #empty>No results found</template>
+              </o-autocomplete>
+            </o-field>
+            <br><br>
+            <p><b>Selected:</b> {{ selected }}</p>
+          </section>
+        </div>
 
           <div v-if="userSelected">
-            <button class="button-style" @click.prevent="userSelected=!userSelected">
+            <button class="button-style" @click.prevent="userSelected = !userSelected">
               Go Back
             </button>
             <div class="box" v-for="(activity, index) in filteredPosts.slice().reverse()" :key="index">
@@ -72,9 +112,10 @@ async function getuserprofile(){
                 <div class="media-content">
                   <div class="content">
                     <p class="is-size-5">
-                        <strong>{{ activity.firstName }} {{ activity.lastName }}</strong>   <small>{{ activity.email }}</small><br>
-                        
-                        <small>0m</small>
+                      <strong>{{ activity.firstName }} {{ activity.lastName }}</strong> <small>{{ activity.email
+                      }}</small><br>
+
+                      <small>0m</small>
                       <br>
                       {{ activity.title }}
                     </p>
@@ -124,15 +165,18 @@ async function getuserprofile(){
 
 <style scoped>
 .button-style {
-  transform: scale(1); /* Default scale */
-  color: #3498db; /* Default text color */
-  transition: transform 0.3s ease; /* Smooth transition effect */
+  transform: scale(1);
+  /* Default scale */
+  color: #3498db;
+  /* Default text color */
+  transition: transform 0.3s ease;
+  /* Smooth transition effect */
 
   /* Other button styles */
 }
 
 .button-style:hover {
-  transform: scale(1.1); /* Hover scale */
+  transform: scale(1.1);
+  /* Hover scale */
 }
-
 </style>

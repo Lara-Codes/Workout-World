@@ -59,3 +59,18 @@ export async function getUserByEmail(email: string): Promise<User | undefined> {
   const users = await getUsers();
   return users.find( x => x.email === email );
 }
+
+export function useFilterUsers() {
+  const router = useRouter();
+
+  return {
+    async filterData(param: string){
+      try {
+        const response = await api("users/param", { param });
+        return response.users; 
+      } catch (error) {
+        console.error(error);
+      }
+    },
+  };
+}

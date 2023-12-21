@@ -150,6 +150,23 @@ async function remove(email) {
   return { success: true, message: 'User deleted successfully.' };
 }
 
+async function userSearch(param) {
+  const db = await connect()
+  const usersCollection = db.collection('users');
+  const regex = new RegExp(param, 'i');
+
+  // Use the regular expression in the query to find matching users
+  const matchingUsers = await usersCollection.find({
+    $or: [
+      { firstName: { $regex: regex } },
+      { lastName: { $regex: regex } },
+    ],
+  }).toArray();
+  
+  return matchingUsers;
+}
+
+
 function generateJWT(user) {
   return new Promise((resolve, reject) => {
     jwt.sign(user, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN }, (err, token) => {
@@ -175,5 +192,5 @@ function verifyJWT(token) {
 }
 
 module.exports = {
-  getAll, remove, login, register, edit, updateasadmin, generateJWT, verifyJWT
+  getAll, remove, login, register, edit, updateasadmin, userSearch, generateJWT, verifyJWT
 };

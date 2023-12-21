@@ -1,5 +1,5 @@
 const express = require('express');
-const { getAll, remove, login, register, edit, updateasadmin } = require('../models/users');
+const { getAll, remove, login, register, edit, updateasadmin, userSearch } = require('../models/users');
 const { requireUser } = require('../middleware/authorization');
 const router = express.Router();
 
@@ -15,6 +15,15 @@ router
             res.json({ success: true, users: allusers });
         } catch (error) {
             next(error);
+        }
+    })
+
+    .post('/param', async(req, res, next) => {
+        try{
+            const searchresult = await userSearch(req.body.param); 
+            res.json({success: true, users: searchresult})
+        }catch(error){
+            next(error); 
         }
     })
 
