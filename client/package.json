@@ -12,6 +12,7 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.4",
     "@oruga-ui/oruga-next": "^0.8.2",
+    "@oruga-ui/theme-oruga": "^0.2.1",
     "bulma": "^0.9.4",
     "vue": "^3.3.4",
     "vue-router": "^4.2.4",

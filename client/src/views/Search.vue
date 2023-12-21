@@ -63,6 +63,7 @@ const doFilter = async () => {
 </script>
 
 <template>
+  <link rel="stylesheet" href="https://unpkg.com/@oruga-ui/theme-oruga/dist/oruga.min.css" />
   <main columns is-multiline is-centered>
     <div class="column is-full ml-4 mr-4 mt-6">
       <h1 class="title is-3 hometitle">Search for friends!</h1>
@@ -175,4 +176,6 @@ const doFilter = async () => {
   transform: scale(1.1);
   /* Hover scale */
 }
+@import url('@oruga-ui/theme-oruga/dist/scss/oruga-full.scss');
+
 </style>
