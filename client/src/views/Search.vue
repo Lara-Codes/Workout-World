@@ -32,8 +32,9 @@ if (session) {
   });
 }
 
-function setSelectedUser(email: string) {
-  selectedUserEmail.value = email;
+function setSelectedUser(email: string | number) {
+  const fullName = String(email);
+  selectedUserEmail.value = email as string;
 }
 
 let filteredPosts = ref<Array<{ firstName: string, lastName: string, email: string, title: string; date: string; duration: string; distance: string, location: string, subject: string }>>([]);
@@ -51,19 +52,14 @@ const name = ref("");
 const selected = ref();
 
 const filteredData = ref([]);
-let namesArray: string[] = []
+const namesArray = computed(() => {
+  return filteredData.value.map(({ firstName, lastName }) => `${firstName} ${lastName}`);
+});
 
 const doFilter = async () => {
   filteredData.value = await filterData(name.value);
-  namesArray = filteredData.value.map(({ firstName, lastName }) => `${firstName} ${lastName}`);
-  console.log(namesArray)
+  console.log(namesArray.value);
 }
-
-// const filteredDataArray = computed(() =>
-//     data.value
-// );
-
-
 </script>
 
 <template>
@@ -89,7 +85,7 @@ const doFilter = async () => {
           <section>
             <o-field label="Search For a User">
               <o-autocomplete v-model="name" rounded expanded placeholder="e.g. Rabbi Plotkin" icon="search" clearable
-                open-on-focus :data="namesArray" @select="(option) => (selected = option)" @input="doFilter">
+                open-on-focus :data="namesArray" @select="(option) => {(selected = option); setSelectedUser(option)}" @input="doFilter">
                 <template #empty>No results found</template>
               </o-autocomplete>
             </o-field>
