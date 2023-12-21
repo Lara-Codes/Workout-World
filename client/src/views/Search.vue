@@ -1,25 +1,119 @@
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { getSession } from '../model/session'
-const newTask = ref('');
-const tasks = ref([] as string[])
+import { useGetUsers } from '@/model/users';
+import { useRetrievePosts } from '../model/friends'
 
-function addTask() {
-  tasks.value.push(newTask.value);
-  newTask.value = '';
-}
+let userSelected=ref(false)
+let selectedUserEmail = ref('');
 
 const session = getSession()
+let friends = ref<Array<{ firstName: string, lastName: string, email: string }>>([]);
+let posts = ref<Array<{ firstName: string, lastName: string, email: string, title: string; date: string; duration: string; distance: string, location: string, subject: string }>>([]);
+
+if (session) {
+  onMounted(async () => {
+    try {
+      if (session.user) {
+        const result = await useGetUsers().data()
+        const simplifiedFriends = await result.map(({ firstName, lastName, email }: { firstName: string, lastName: string, email: string }) => ({ firstName, lastName, email }));
+        friends.value = simplifiedFriends
+
+        const res = await useRetrievePosts().data();
+        posts.value = res?.posts || [];
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  });
+}
+
+function setSelectedUser(email: string) {
+  selectedUserEmail.value = email;
+}
+
+let filteredPosts = ref<Array<{ firstName: string, lastName: string, email: string, title: string; date: string; duration: string; distance: string, location: string, subject: string }>>([]);
+async function getuserprofile(){
+  filteredPosts.value = posts.value.filter((post) => post.email === selectedUserEmail.value);
+  selectedUserEmail.value=''
+}
+
 </script>
 
 <template>
   <main columns is-multiline is-centered>
-    <div class="column is-full ml-3 mr-3 pt-6 pb-6 pl-4 pr-4">
+    <div class="column is-full ml-4 mr-4 mt-6">
       <h1 class="title is-3 hometitle">Search for friends!</h1>
       <h2 class="subtitle">
-        <div v-if="session.user" class="level-item has-text-centered mt-6"> 
+        <div v-if="session.user" class="level-item has-text-centered mt-6">
+
+          <div v-if="!userSelected">
+            <div v-for="friend in friends" :key="friend.email" class="card mb-5">
+              <header class="card-header">
+              <button class="card-header-title button-style" @click.prevent="setSelectedUser(friend.email); getuserprofile(); userSelected=!userSelected">
+                {{ friend.firstName }} {{ friend.lastName }}
+              </button>
+            </header>
+            </div>
+          </div>
+
+          <div v-if="userSelected">
+            <button class="button-style" @click.prevent="userSelected=!userSelected">
+              Go Back
+            </button>
+            <div class="box" v-for="(activity, index) in filteredPosts.slice().reverse()" :key="index">
+              <article class="media">
+                <figure class="media-left">
+                  <p class="image is-64x64">
+                    <img src="https://bulma.io/images/placeholders/128x128.png">
+                  </p>
+                </figure>
+                <div class="media-content">
+                  <div class="content">
+                    <p class="is-size-5">
+                        <strong>{{ activity.firstName }} {{ activity.lastName }}</strong>   <small>{{ activity.email }}</small><br>
+                        
+                        <small>0m</small>
+                      <br>
+                      {{ activity.title }}
+                    </p>
+                    <div class="columns">
+                      <div class="column has-text-centered"
+                        style="display: flex; justify-content: space-around; align-items: center;">
+                        <div class="title">
+                          {{ activity.distance }}
+                          <div class="subtitle is-size-7">DISTANCE</div>
+                        </div>
+                        <div class="title">
+                          {{ activity.duration }}
+                          <div class="subtitle is-size-7">DURATION</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <nav class="level is-mobile">
+                    <div class="level-left">
+                      <a class="level-item">
+                        <span class="icon is-small"><i class="fas fa-reply"></i></span>
+                      </a>
+                      <a class="level-item">
+                        <span class="icon is-small"><i class="fas fa-retweet"></i></span>
+                      </a>
+                      <a class="level-item">
+                        <span class="icon is-small"><i class="fas fa-heart"></i></span>
+                      </a>
+                    </div>
+                  </nav>
+                </div>
+              </article>
+            </div>
+          </div>
+
+
         </div>
+
+
         <div v-else>
           Please log in to search for your friends.
         </div>
@@ -27,3 +121,18 @@ const session = getSession()
     </div>
   </main>
 </template>
+
+<style scoped>
+.button-style {
+  transform: scale(1); /* Default scale */
+  color: #3498db; /* Default text color */
+  transition: transform 0.3s ease; /* Smooth transition effect */
+
+  /* Other button styles */
+}
+
+.button-style:hover {
+  transform: scale(1.1); /* Hover scale */
+}
+
+</style>

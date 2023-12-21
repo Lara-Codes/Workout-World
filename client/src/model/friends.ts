@@ -33,7 +33,6 @@ export function useRetrievePosts(){
         async data(){
             try{
                 const response = await api("activities/getall", {}); 
-                console.log(response)
                 if (response.success === true) {
                     return response.posts;
                 }

@@ -17,6 +17,15 @@ router
             next(error);
         }
     })
+
+    .post('/usersdata', async (req, res, next) => {
+        try {
+            const allusers = await getAll();
+            res.json({ success: true, users: allusers });
+        } catch (error) {
+            next(error);
+        }
+    })
     // })
     .post('/signup', async (req, res, next) => {
         try{

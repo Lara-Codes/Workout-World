@@ -24,7 +24,6 @@
   try {
     if (session.user) {
       const result = await taskData().data(session.user.email);
-      console.log(result.tasks)
       tasks.value = result.tasks
     }
   } catch (error) {

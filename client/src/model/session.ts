@@ -95,11 +95,6 @@ export function useAdmin(){
   return{
     async ad(){
       const response = await api("users/users", {}) 
-      // if(response.success===true){
-      //   router.push(session.redirectUrl || "/users");
-      // } else{
-      //   toast(response.error)
-      // }
     }
   }
 }
@@ -126,7 +121,7 @@ export function useEditAsAdmin(){
     async edit(ogemail: string, email: string, firstName: string, lastName: string, role: string, password: string) {
       const response = await api("users/editasadmin", {ogemail, email, firstName, lastName, role, password})
       if(response.success){
-        toast.success("Profile edited successfully. Please log out and log back in to see changes.")
+        toast.success("Profile edited successfully.")
       }else{
         toast.error(response.message)
       }

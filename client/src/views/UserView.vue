@@ -74,8 +74,48 @@ const newlname = ref('')
 const newrole = ref('user')
 const newpass = ref('')
 
+const resetFields = () => {
+    newemail.value = '';
+    newfname.value = '';
+    newlname.value = '';
+    newrole.value = 'user'; // Set a default value for the role, change as needed
+    newpass.value = '';
+};
+
 const doEdit = () => {
     edit(ogemail.value, newemail.value, newfname.value, newlname.value, newrole.value, newpass.value)
+
+    const userIndex = userData.value.findIndex(user => user.email === ogemail.value);
+
+    if (userIndex !== -1) {
+        // Create a copy of the user object with existing values
+        const currentUser = { ...userData.value[userIndex] };
+
+        // Update the fields if they are not null or empty string
+        if (newfname.value !== null && newfname.value !== '') {
+            currentUser.firstName = newfname.value;
+        }
+
+        if (newlname.value !== null && newlname.value !== '') {
+            currentUser.lastName = newlname.value;
+        }
+
+        if (newemail.value !== null && newemail.value !== '') {
+            currentUser.email = newemail.value;
+        }
+
+        if (newrole.value !== null && newrole.value !== '') {
+            currentUser.role = newrole.value;
+        }
+
+        if (newpass.value !== null && newpass.value !== '') {
+            currentUser.password = newpass.value;
+        }
+
+        // Update the user data in the local array
+        userData.value[userIndex] = currentUser;
+        resetFields();
+    }
 }
 
 const deleteUser = async (email: string) => {
@@ -248,7 +288,7 @@ const deleteUser = async (email: string) => {
                     </div>
                 </div>
                 <footer class="modal-card-foot">
-                    <button class="button is-success" @click.prevent="doEdit">Save
+                    <button class="button is-success" @click.prevent="doEdit(); showEdit = !showEdit">Save
                         changes</button>
                     <button class="button" @click="showEdit = !showEdit">Cancel</button>
                 </footer>
