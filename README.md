@@ -36,7 +36,23 @@ With Workout World, we can do all of that. Feel free to browse the code and make
 
 ## Features
 
-- [List key features or functionalities of the project]
+### 1. To-Do lists 
+Write to-do lists for daily goals. View current tasks, completed tasks, and all tasks in separate tabs. 
+
+### 2. Personal Activity
+Add workouts. Includes title, date, duration, distance, location, and workout type fields. 
+
+### 3. Statistics
+View average distance, duration, pace, and calories burnt for the day, the week, and all time. 
+
+### 3. Friends Activity 
+View activities logged by friends. 
+
+### 4. Search 
+Search registered users. 
+
+### 5. Admin page 
+Admin page to delete users, edit users, and change privileges to admin or user.   
 
 ## Getting Started
 
