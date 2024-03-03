@@ -28,8 +28,11 @@ Welcome to Workout World! A new, user-friendly social networking application to 
   - [License](#license)
 
 ## Introduction
+Welcome to Workout World! It all started when a couple of my friends from my Computer Science class invited me to the gym. Going to the gym with tech people is always fun. We refer to the stacked weight plates on the barbell as the Tower of Hanoi, and apply binary search when figuring out our ideal weight for an exercise. 
 
-[Provide a more detailed introduction to the project, including its purpose, goals, and any relevant background information.]
+As me and my nerdy gym friends continued to get stronger, we started to graph our progress using Excel and update eachother on Discord. This is where Workout World came in. What if there was a centralized location for all of us to share progress, create workout plans/to-do lists, and track statistics all in one location? 
+
+With Workout World, we can do all of that. Feel free to browse the code and make a contribution if you are interested and have an idea for an improvement! 
 
 ## Features
 
