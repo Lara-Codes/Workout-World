@@ -1,6 +1,18 @@
-# Project Name
+# Workout World
 
-[Short description or overview of the project]
+Welcome to Workout World! A new, user-friendly social networking application to track to-do lists, workout goals, workout progress/statistics, and to share progress and daily exercises with friends. Whether you are a newbie gym-goer, a casual jogger, or a professional bodybuilder, Workout World can help you meet your goals and stay motivated daily. 
+
+### Stack
+- Frontend:
+  - Vue.js
+  - Bulma CSS
+
+- Backend:
+  - Node.js
+  - Express.js
+
+- Database:
+  - MongoDB
 
 ## Table of Contents
 
