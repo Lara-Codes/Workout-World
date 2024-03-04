@@ -9,7 +9,7 @@ Welcome to Workout World! A new, user-friendly social networking application to 
 
 ### Stack
 - Frontend:
-  - Vue.js
+  - Vue.js (with TypeScript) 
   - Bulma CSS
 
 - Backend:
