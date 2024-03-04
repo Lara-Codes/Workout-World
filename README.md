@@ -56,13 +56,14 @@ Admin page to delete users, edit users, and change privileges to admin or user.
 
 ## Getting Started
 
-### Prerequisites
-
-[Specify any prerequisites or requirements that users need to have installed before they can use the project.]
-
 ### Installation
 
-[Provide step-by-step instructions on how to install and set up the project.]
+1. **Clone the Repository**: 
+   Clone the Workout World repository to your local machine using Git:
+``` bash
+  git clone https://github.com/Lara-Codes/Workout-World.git
+```
+
 
 ## Usage
 
