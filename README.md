@@ -180,8 +180,9 @@ If you encounter any bugs or issues while using our application, please let us k
 
 Have an idea for a new feature or improvement? I'd love to hear it! [Open an issue]([[https://github.com/your-username/your-project/issues](https://github.com/Lara-Codes/Workout-World/issues](https://github.com/Lara-Codes/Workout-World/issues))) on GitHub and share your thoughts. I'm always looking for ways to make my applications better, and your feedback is invaluable.
 
+
 ## License
 
-[Specify the license under which the project is distributed. Include any relevant copyright information.]
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 
