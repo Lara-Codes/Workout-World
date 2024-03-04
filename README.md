@@ -1,6 +1,6 @@
 
 # Workout World
-<img src="/workout" alt="Workout icon" width="200" height="200">
+<img src="/workout.png" alt="Workout icon" width="200" height="200">
 
 
 Welcome to Workout World! A new, user-friendly social networking application to track to-do lists, workout goals, workout progress/statistics, and to share progress and daily exercises with friends. Whether you are a newbie gym-goer, a casual jogger, or a professional bodybuilder, Workout World can help you meet your goals and stay motivated daily. 
