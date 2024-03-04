@@ -56,6 +56,11 @@ Admin page to delete users, edit users, and change privileges to admin or user.
 
 ## Getting Started
 
+### Prerequisites 
+You must have node.js and npm package manager installed on your machine. Installation instructions can be found [here]([URL](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)).
+. 
+
+
 ### Installation
 
 1. **Clone the Repository**: 
@@ -63,6 +68,12 @@ Admin page to delete users, edit users, and change privileges to admin or user.
 ``` bash
   git clone https://github.com/Lara-Codes/Workout-World.git
 ```
+2. **Navigate to client directory and install dependencies**:
+   ```bash
+    cd client
+   npm i
+  ```
+3. **Navigate to server directory and install dependencies**:
 
 
 ## Usage
