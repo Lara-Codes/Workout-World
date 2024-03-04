@@ -60,6 +60,57 @@ Admin page to delete users, edit users, and change privileges to admin or user.
 You must have node.js and npm package manager installed on your machine. Installation instructions can be found [here]([URL](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)).
 . 
 
+### Creating a MongoDB Atlas Account
+To use MongoDB as your database for this application, you'll need to create an account with MongoDB Atlas. Follow these steps to get started:
+
+1. **Sign Up**: 
+   - Go to the [MongoDB Atlas website](https://www.mongodb.com/cloud/atlas) and click on the "Start Free" button.
+   - Follow the prompts to create a new account.
+
+2. **Create a Cluster**:
+   - After signing in, click on the "Build a Cluster" button to create a new cluster.
+   - Choose your preferred cloud provider, region, and cluster configuration. You can use the free tier for testing purposes.
+
+3. **Create a Users Collection**:
+
+To store data in MongoDB for this application, you'll need to define a collection schema that outlines the structure of each document. 
+
+Each document in the `users` collection should have the following attributes:
+
+- **_id**: ObjectId - A unique identifier for the user.
+- **email**: String - The email address of the user.
+- **password**: String - The hashed password of the user.
+- **firstName**: String - The first name of the user.
+- **lastName**: String - The last name of the user.
+- **role**: String - The role or permissions assigned to the user (e.g., "user", "admin").
+- **posts**: Array of ObjectIds - An array of references to the user's posts.
+
+### Example Document:
+
+```json
+{
+  "_id": "6571f90a17dd2b12c1a2b35a",
+  "email": "johnnyappleseed@gmail.com",
+  "password": "johnny", // Note: Password should be hashed for security
+  "firstName": "John",
+  "lastName": "Appleseed",
+  "role": "user",
+  "posts": [
+    ObjectId("123456789012345678901234"), // Reference to a post document
+    ObjectId("234567890123456789012345")  // Reference to another post document
+  ]
+}
+```
+
+4. **Obtain the Connection URI**:
+   - Once your cluster is created, navigate to the "Connect" tab in the MongoDB Atlas dashboard.
+   - Choose "Connect Your Application" and copy the provided connection URI. This will be used as an environment variable. 
+
+### Example Connection URI:
+
+```plaintext
+mongodb+srv://<username>:<password>@<cluster-name>.mongodb.net/<database>
+```
 
 ### Installation
 
@@ -70,11 +121,51 @@ You must have node.js and npm package manager installed on your machine. Install
 ```
 2. **Navigate to client directory and install dependencies**:
    ```bash
-    cd client
+   
+   cd client
    npm i
-  ```
-3. **Navigate to server directory and install dependencies**:
 
+3. **Navigate to server directory and install dependencies**:
+  ```bash
+  cd server
+  npm run build
+  npm i
+```
+4. **Environment Variables**:
+  In the client directory, create a .env file and add the following line:
+```plaintext
+
+VITE_API_ROOT=http://localhost:3000/api/v1
+```
+  In the server directory, create a .env file and add the following lines:
+  You'll need to create a MongoDB account and create a database. Details above. 
+```plaintext
+
+PORT=3000
+MONGO_URI=mongodb+srv://<username>:<password>@<cluster-name>.mongodb.net/<database>
+MONGO_DB_NAME=myDBname
+JWT_SECRET=myJWTSecret
+JWT_EXPIRES_IN=3h
+```
+
+5. **Start the Development Server**:
+```bash
+# Terminal 1
+# Navigate to the project directory
+cd client
+
+# Start the frontend server
+npm run dev
+
+# Terminal 2
+# Navigate to the project directory
+cd your-project
+
+# Start the backend server
+cd server
+npm start
+```
+Now, open your browser and follow the link displayed on the frontend server. Happy exercising!
 
 ## Usage
 
