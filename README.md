@@ -14,6 +14,7 @@ Welcome to Workout World! A new, user-friendly social networking application to 
   - Express.js
   - MongoDB
   -CORS middleware
+  - User authentication with JSON Web Tokens
 
 ## Table of Contents
 
